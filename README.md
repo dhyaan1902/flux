@@ -1,3 +1,35 @@
+## 🔑 API Key Usage
+
+Flux uses the TMDB API for metadata.  
+The app includes **a default API key**, but:
+
+> **⚠️ This key may get rate-limited or blocked at any time.**
+
+You are *absolutely allowed* to use the bundled key,  
+**but it is highly recommended that you add your own.**
+
+### Why add your own key?
+- Avoid random outages if the public key hits rate limits  
+- Faster, more reliable responses  
+- TMDB encourages each user/dev to register their own API key  
+- Takes less than 30 seconds  
+
+### How to add your own (recommended way)
+You can add your own key directly inside the app:
+
+1. Open **My Netflix** tab  
+2. Tap **API Key Settings**  
+3. Paste your TMDB key  
+4. Done! Your requests now use your personal, unrestricted key
+
+### If you still want to use the default key
+Go ahead — it *should* work.  
+Just don’t blame me if one day TMDB says “nah” and cuts it off. 😂
+
+
+
+
+
 # Flux — Netflix-Style Catalog Application
 
 Flux is a modern, lightweight, and visually polished movie catalog application inspired by the Netflix user interface. Built primarily with **TypeScript**, it delivers a smooth, responsive, and native-feeling browsing experience on Android, with features such as powerful search, an organized library system, and fluid UI transitions. All of this comes in an exceptionally small build size, with no ads, trackers, or unnecessary SDK overhead.
