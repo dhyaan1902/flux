@@ -14,65 +14,72 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, onToggleMyList }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const seed = item.imdbId || 'hero';
-  
+
   // Prioritize backdrop (landscape) for Hero, fallback to poster
-  const backgroundUrl = item.backdropUrl || item.posterUrl || `https://picsum.photos/seed/${seed}/800/1200`;
+  const rawUrl = item.backdropUrl || item.posterUrl || `https://picsum.photos/seed/${seed}/800/1200`;
+  const backgroundUrl = rawUrl.replace('w342', 'original').replace('w1280', 'original');
 
   return (
-    <div className="relative w-full aspect-[2/3] md:aspect-video max-h-[85vh] overflow-hidden bg-[#121212]">
-      {/* Background Image with Zoom Animation */}
-      <div className="absolute inset-0 overflow-hidden">
-          <img 
-            src={backgroundUrl} 
-            alt={item.title} 
-            onLoad={() => setIsLoaded(true)}
-            className={`w-full h-full object-cover animate-ken-burns transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-          />
+    <div className="relative w-full aspect-[2/3] max-h-[80vh] overflow-hidden bg-[#000000]">
+      {/* Background Image - Static, no zoom */}
+      <div className="absolute inset-0">
+        <img
+          src={backgroundUrl}
+          alt={item.title}
+          onLoad={() => setIsLoaded(true)}
+          className={`w-full h-full object-cover transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+        />
+        {/* Bottom vignette only */}
+        <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-[#000000] via-[#000000]/60 to-transparent" />
       </div>
-      
-      {/* Refined Gradients for Readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#000000] z-0" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#000000] via-[#000000]/60 to-transparent z-0" />
-      
+
       {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 px-8 pb-10 flex flex-col items-center text-center z-10">
-        {/* Title */}
-        <h1 className="text-4xl md:text-6xl font-black text-white mb-4 drop-shadow-2xl tracking-tight text-center max-w-4xl leading-none animate-in fade-in slide-in-from-bottom-4 duration-700">
-            {item.title}
+      <div className="absolute bottom-0 left-0 right-0 pb-8 flex flex-col items-center text-center z-10 w-full">
+        {/* Title - Enhanced typography */}
+        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-tighter text-center max-w-5xl leading-[0.9] animate-in fade-in slide-in-from-bottom-8 duration-1000">
+          {item.title}
         </h1>
 
-        {/* Genre Tags */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8 text-xs md:text-sm text-gray-200 font-medium drop-shadow-md opacity-90 animate-in fade-in slide-in-from-bottom-5 duration-1000">
-           <span className="flex items-center gap-2">
-             {item.genres.slice(0, 3).join(' • ')}
-           </span>
+        {/* Genre Tags - Simple text with dots */}
+        <div className="flex flex-wrap justify-center gap-1.5 mb-6 px-8">
+          {item.genres.slice(0, 4).map((g, i) => (
+            <React.Fragment key={i}>
+              <span className="text-[11px] text-white/90 font-medium tracking-wide shadow-black drop-shadow-md">
+                {g}
+              </span>
+              {i < Math.min(3, item.genres.length - 1) && <span className="text-white/60 text-[10px]">•</span>}
+            </React.Fragment>
+          ))}
         </div>
 
-        {/* Buttons Row */}
-        <div className="flex items-center justify-center w-full gap-6 md:gap-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
-            <button 
-                className="flex flex-col items-center gap-1.5 text-white group hover:scale-105 transition-transform active:scale-95" 
-                onClick={onToggleMyList}
-            >
-                {isInMyList ? <Check className="w-6 h-6 text-green-500" /> : <Plus className="w-6 h-6" />}
-                <span className="text-[10px] font-medium text-gray-200 group-hover:text-white">My List</span>
-            </button>
+        {/* Buttons Row - Netflix Mobile Exact Style */}
+        <div className="flex items-center justify-between w-full px-10 max-w-md mx-auto">
+          {/* My List - Vertical Stack */}
+          <button
+            className="flex flex-col items-center gap-1 min-w-[60px]"
+            onClick={onToggleMyList}
+          >
+            {isInMyList ? <Check className="w-6 h-6 text-white" /> : <Plus className="w-6 h-6 text-white" />}
+            <span className="text-[10px] text-[#b3b3b3] font-medium">My List</span>
+          </button>
 
-            <button 
-                onClick={onPlay}
-                className="flex items-center gap-2 bg-white text-black px-8 py-3 rounded-[4px] font-bold hover:bg-white/90 active:scale-95 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-            >
-                <Play className="w-6 h-6 fill-black" />
-                <span className="text-lg">Play</span>
-            </button>
+          {/* Play Button - White Block */}
+          <button
+            onClick={onPlay}
+            className="flex items-center justify-center gap-2 bg-white text-black px-4 py-2 rounded-[4px] font-bold min-w-[110px] h-[40px] active:opacity-80 transition-opacity"
+          >
+            <Play className="w-5 h-5 fill-black" />
+            <span className="text-[16px]">Play</span>
+          </button>
 
-            <button 
-                className="flex flex-col items-center gap-1.5 text-white group hover:scale-105 transition-transform active:scale-95" 
-                onClick={onInfo}
-            >
-                <Info className="w-6 h-6" />
-                <span className="text-[10px] font-medium text-gray-200 group-hover:text-white">Info</span>
-            </button>
+          {/* Info Button - Vertical Stack */}
+          <button
+            className="flex flex-col items-center gap-1 min-w-[60px]"
+            onClick={onInfo}
+          >
+            <Info className="w-6 h-6 text-white" />
+            <span className="text-[10px] text-[#b3b3b3] font-medium">Info</span>
+          </button>
         </div>
       </div>
     </div>

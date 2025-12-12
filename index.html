@@ -1,78 +1,96 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
-    <title>Netflix Clone</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
-    <!-- Google Cast SDK -->
-    <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: #000000;
-        color: #ffffff;
-        -webkit-tap-highlight-color: transparent;
-        /* Native App Feel: Disable Selection and Overscroll */
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        user-select: none;
-        overscroll-behavior: none;
-      }
-      
-      /* Re-enable select for inputs */
-      input, textarea {
-          -webkit-user-select: text;
-          user-select: text;
-      }
-      
-      /* Global scrollbar hiding */
-      * {
-          -ms-overflow-style: none;  /* IE and Edge */
-          scrollbar-width: none;  /* Firefox */
-      }
-      *::-webkit-scrollbar {
-          display: none; /* Chrome, Safari and Opera */
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
+  <title>Netflix Clone</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #000000;
+      color: #ffffff;
+      -webkit-tap-highlight-color: transparent;
+      /* Native App Feel: Disable Selection and Overscroll */
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      overscroll-behavior: none;
+    }
+
+    /* Re-enable select for inputs */
+    input,
+    textarea {
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    /* Global scrollbar hiding */
+    * {
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */
+    }
+
+    *::-webkit-scrollbar {
+      display: none;
+      /* Chrome, Safari and Opera */
+    }
+
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .pt-safe {
+      padding-top: env(safe-area-inset-top);
+    }
+
+    /* CUSTOM ANIMATIONS */
+
+    /* Shimmer Effect for Loading Skeletons */
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
       }
 
-      .pb-safe {
-          padding-bottom: env(safe-area-inset-bottom);
+      100% {
+        background-position: -200% 0;
       }
-      
-      .pt-safe {
-          padding-top: env(safe-area-inset-top);
+    }
+
+    .animate-shimmer {
+      background: linear-gradient(90deg, #1f1f1f 25%, #2a2a2a 37%, #1f1f1f 63%);
+      background-size: 200% 100%;
+      animation: shimmer 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Slow Zoom for Hero Images */
+    @keyframes ken-burns {
+      0% {
+        transform: scale(1);
       }
 
-      /* CUSTOM ANIMATIONS */
-      
-      /* Shimmer Effect for Loading Skeletons */
-      @keyframes shimmer {
-        0% { background-position: 200% 0; }
-        100% { background-position: -200% 0; }
+      100% {
+        transform: scale(1.15);
       }
-      .animate-shimmer {
-        background: linear-gradient(90deg, #1f1f1f 25%, #2a2a2a 37%, #1f1f1f 63%);
-        background-size: 200% 100%;
-        animation: shimmer 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
+    }
 
-      /* Slow Zoom for Hero Images */
-      @keyframes ken-burns {
-         0% { transform: scale(1); }
-         100% { transform: scale(1.15); }
-      }
-      .animate-ken-burns {
-         animation: ken-burns 20s ease-out infinite alternate;
-         will-change: transform;
-      }
-    </style>
+    .animate-ken-burns {
+      animation: ken-burns 20s ease-out infinite alternate;
+      will-change: transform;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -84,10 +102,55 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            netflix: {
+              red: '#E50914',
+              black: '#141414',
+              dark: '#000000',
+              gray: '#2F2F2F',
+            },
+            glass: {
+              DEFAULT: 'rgba(20, 20, 20, 0.5)',
+              light: 'rgba(255, 255, 255, 0.1)',
+              border: 'rgba(255, 255, 255, 0.05)',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-out',
+            'slide-up': 'slideUp 0.5s ease-out',
+            'scale-up': 'scaleUp 0.3s ease-out',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' },
+            },
+            scaleUp: {
+              '0%': { transform: 'scale(0.95)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="root"></div>
+
+<body>
+  <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>

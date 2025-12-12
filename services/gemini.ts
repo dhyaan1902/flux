@@ -19,12 +19,12 @@ const TMDB_BACKDROP_BASE = 'https://image.tmdb.org/t/p/w1280';
 const CINEMETA_BASE = 'https://v3-cinemeta.strem.io';
 
 const GENRE_MAP: Record<number, string> = {
-  28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy", 80: "Crime",
-  99: "Documentary", 18: "Drama", 10751: "Family", 14: "Fantasy", 36: "History",
-  27: "Horror", 10402: "Music", 9648: "Mystery", 10749: "Romance", 878: "Sci-Fi",
-  10770: "TV Movie", 53: "Thriller", 10752: "War", 37: "Western",
-  10759: "Action & Adventure", 10762: "Kids", 10763: "News", 10764: "Reality",
-  10765: "Sci-Fi & Fantasy", 10766: "Soap", 10767: "Talk", 10768: "War & Politics"
+    28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy", 80: "Crime",
+    99: "Documentary", 18: "Drama", 10751: "Family", 14: "Fantasy", 36: "History",
+    27: "Horror", 10402: "Music", 9648: "Mystery", 10749: "Romance", 878: "Sci-Fi",
+    10770: "TV Movie", 53: "Thriller", 10752: "War", 37: "Western",
+    10759: "Action & Adventure", 10762: "Kids", 10763: "News", 10764: "Reality",
+    10765: "Sci-Fi & Fantasy", 10766: "Soap", 10767: "Talk", 10768: "War & Politics"
 };
 
 interface RowConfig {
@@ -67,7 +67,7 @@ const fetchTmdb = async (endpoint: string, params: Record<string, string> = {}) 
     const url = new URL(`${TMDB_BASE_URL}${endpoint}`);
     url.searchParams.append('api_key', currentTmdbApiKey);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-    
+
     const res = await fetch(url.toString());
     if (!res.ok) throw new Error(`TMDb Error: ${res.status}`);
     return res.json();
@@ -101,7 +101,7 @@ const transformTmdbItem = (item: any, mediaType?: MediaType): MediaItem => {
     const title = item.title || item.name || item.original_title || 'Unknown Title';
     const releaseDate = item.release_date || item.first_air_date || '';
     const year = releaseDate ? releaseDate.split('-')[0] : '';
-    
+
     let genres: string[] = [];
     if (item.genres) {
         genres = item.genres.map((g: any) => g.name);
@@ -112,7 +112,7 @@ const transformTmdbItem = (item: any, mediaType?: MediaType): MediaItem => {
     return {
         id: String(item.id),
         tmdbId: item.id,
-        imdbId: item.external_ids?.imdb_id || undefined, 
+        imdbId: item.external_ids?.imdb_id || undefined,
         title,
         year,
         type,
@@ -121,9 +121,9 @@ const transformTmdbItem = (item: any, mediaType?: MediaType): MediaItem => {
         posterUrl: getImageUrl(item.poster_path, 'poster'),
         backdropUrl: getImageUrl(item.backdrop_path, 'backdrop'),
         genres,
-        cast: [], 
+        cast: [],
         totalSeasons: item.number_of_seasons,
-        director: undefined 
+        director: undefined
     };
 };
 
@@ -131,7 +131,7 @@ const transformCinemetaItem = (item: any): MediaItem => {
     const type = item.type === 'movie' ? MediaType.MOVIE : MediaType.TV_SHOW;
     // ReleaseInfo often format "2009" or "2010-2015"
     const year = item.releaseInfo ? item.releaseInfo.substring(0, 4) : '';
-    
+
     return {
         id: item.imdb_id || item.id, // Prefer imdb_id if explicit, else id (usually tt...)
         tmdbId: 0, // No TMDB ID
@@ -161,22 +161,66 @@ export const fetchGenres = async (): Promise<Genre[]> => {
     }
 };
 
+const createDynamicRowConfig = (genreId?: number, genreName?: string, typeFilter?: MediaType | null): RowConfig => {
+    // 1. Determine Target Type
+    // If strict filter, use it. Else random mix (60% Movie, 40% TV)
+    const targetType = typeFilter || (Math.random() > 0.4 ? MediaType.MOVIE : MediaType.TV_SHOW);
+    const endpoint = targetType === MediaType.MOVIE ? '/discover/movie' : '/discover/tv';
+
+    // 2. Determine Genre
+    let targetGenreId = genreId;
+    let targetGenreName = genreName;
+
+    // If no specific genre requested, pick a random one
+    if (!targetGenreId) {
+        const genreIds = Object.keys(GENRE_MAP).map(Number);
+        targetGenreId = genreIds[Math.floor(Math.random() * genreIds.length)];
+        targetGenreName = GENRE_MAP[targetGenreId];
+    }
+
+    // 3. Determine Page (Random 1-20 to ensure good quality data)
+    const page = Math.floor(Math.random() * 20) + 1;
+
+    // 4. Construct Title
+    // Variations to make it feel organic
+    const titles = [
+        `More ${targetGenreName} to Explore`,
+        `Hidden ${targetGenreName} Gems`,
+        `Rediscover ${targetGenreName}`,
+        `${targetGenreName} - Editor's Picks`,
+        `Because you like ${targetGenreName}`,
+        `Popular in ${targetGenreName}`
+    ];
+    const title = titles[Math.floor(Math.random() * titles.length)];
+
+    return {
+        title,
+        endpoint,
+        params: {
+            with_genres: String(targetGenreId),
+            page: String(page),
+            sort_by: Math.random() > 0.5 ? 'popularity.desc' : 'vote_average.desc',
+            'vote_count.gte': '100' // Ensure decent quality
+        },
+        mediaType: targetType
+    };
+};
+
 export const fetchHomeDataBatch = async (
-    offset: number = 0, 
+    offset: number = 0,
     limit: number = 3,
-    genreId?: number, 
+    genreId?: number,
     genreName?: string,
     seenIds: Set<string> = new Set(),
     typeFilter?: MediaType | null
 ): Promise<{ rows: HomeRow[], hasMore: boolean }> => {
     try {
-        let configs: RowConfig[] = [];
+        // 1. Define Static Configs (The Curated Feed)
+        let staticConfigs: RowConfig[] = [];
 
         if (genreId && genreName) {
-            // GENRE BASED CONFIGS
-            // We construct these dynamically based on the requested Type Filter or default to mixed
+            // Genre-Specific Static Configs
             const baseConfigs: RowConfig[] = [];
-
             if (!typeFilter || typeFilter === MediaType.MOVIE) {
                 baseConfigs.push(
                     { title: `Popular ${genreName} Movies`, endpoint: '/discover/movie', params: { with_genres: String(genreId), sort_by: 'popularity.desc' }, mediaType: MediaType.MOVIE },
@@ -185,36 +229,35 @@ export const fetchHomeDataBatch = async (
                     { title: `New ${genreName} Releases`, endpoint: '/discover/movie', params: { with_genres: String(genreId), sort_by: 'release_date.desc', 'vote_count.gte': '50' }, mediaType: MediaType.MOVIE }
                 );
             }
-            
             if (!typeFilter || typeFilter === MediaType.TV_SHOW) {
-                 baseConfigs.push(
+                baseConfigs.push(
                     { title: `Trending ${genreName} Shows`, endpoint: '/discover/tv', params: { with_genres: String(genreId), sort_by: 'popularity.desc' }, mediaType: MediaType.TV_SHOW },
                     { title: `Critically Acclaimed ${genreName} Series`, endpoint: '/discover/tv', params: { with_genres: String(genreId), sort_by: 'vote_average.desc', 'vote_count.gte': '200' }, mediaType: MediaType.TV_SHOW }
-                 );
+                );
             }
-            configs = baseConfigs;
-
+            staticConfigs = baseConfigs;
         } else {
-            // MAIN FEED
+            // Main Feed Static Configs
             if (typeFilter) {
-                // Filter main feed by media type
-                configs = MAIN_FEED_CONFIGS.filter(c => c.mediaType === typeFilter);
+                staticConfigs = MAIN_FEED_CONFIGS.filter(c => c.mediaType === typeFilter);
             } else {
-                configs = MAIN_FEED_CONFIGS;
+                staticConfigs = MAIN_FEED_CONFIGS;
             }
         }
 
-        const batchConfigs = configs.slice(offset, offset + limit);
-        const hasMore = (offset + limit) < configs.length;
+        // 2. Select Component of Batch from Static
+        const batchConfigs = staticConfigs.slice(offset, offset + limit);
 
-        if (batchConfigs.length === 0) {
-            return { rows: [], hasMore: false };
+        // 3. Fill Remainder with Dynamic Rows (True Infinite Scroll)
+        while (batchConfigs.length < limit) {
+            batchConfigs.push(createDynamicRowConfig(genreId, genreName, typeFilter));
         }
 
+        // 4. Fetch Data (Parallel)
         const promises = batchConfigs.map(async (config) => {
             try {
                 let items: MediaItem[] = [];
-                
+
                 if (config.source === 'cinemeta') {
                     const data = await fetchCinemeta(config.endpoint);
                     if (data.metas && Array.isArray(data.metas)) {
@@ -224,7 +267,7 @@ export const fetchHomeDataBatch = async (
                     const data = await fetchTmdb(config.endpoint, config.params);
                     items = data.results.map((i: any) => transformTmdbItem(i, config.mediaType));
                 }
-                
+
                 return {
                     title: config.title,
                     items
@@ -238,16 +281,16 @@ export const fetchHomeDataBatch = async (
         const results = await Promise.all(promises);
         const validRows: HomeRow[] = [];
 
-        // Sequentially process rows to apply deduplication state
+        // 5. Deduplicate and Validation
         for (const res of results) {
             if (!res) continue;
 
             const uniqueItems: MediaItem[] = [];
-            
+
             for (const item of res.items) {
                 // Basic validation
                 if (!item.posterUrl) continue;
-                
+
                 // Check if already displayed
                 if (seenIds.has(item.id)) continue;
 
@@ -255,10 +298,8 @@ export const fetchHomeDataBatch = async (
             }
 
             // Only show rows that have enough unique items
-            if (uniqueItems.length >= 4) {
-                // Mark these items as seen now that we've committed to showing the row
+            if (uniqueItems.length >= 3) {
                 uniqueItems.forEach(i => seenIds.add(i.id));
-                
                 validRows.push({
                     title: res.title,
                     items: uniqueItems
@@ -266,11 +307,11 @@ export const fetchHomeDataBatch = async (
             }
         }
 
-        return { rows: validRows, hasMore };
+        return { rows: validRows, hasMore: true }; // Infinite scroll
 
     } catch (e) {
         console.error("Home Data Batch Error:", e);
-        return { rows: [], hasMore: false };
+        return { rows: [], hasMore: true };
     }
 };
 
@@ -302,30 +343,30 @@ export const searchMediaCatalog = async (query: string): Promise<MediaItem[]> =>
     try {
         // 1. Fetch from TMDB
         const tmdbPromise = (async () => {
-             // Check for year
-             const yearMatch = query.trim().match(/^\d{4}$/);
-             if (yearMatch) {
-                 const year = yearMatch[0];
-                 const [movies, tv] = await Promise.all([
-                     fetchTmdb('/discover/movie', { primary_release_year: year, sort_by: 'popularity.desc' }),
-                     fetchTmdb('/discover/tv', { first_air_date_year: year, sort_by: 'popularity.desc' })
-                 ]);
-                 const m = movies.results.map((i: any) => transformTmdbItem(i, MediaType.MOVIE));
-                 const t = tv.results.map((i: any) => transformTmdbItem(i, MediaType.TV_SHOW));
-                 return [...m, ...t];
-             }
-             
-             const data = await fetchTmdb('/search/multi', { query });
-             if (data.results[0]?.media_type === 'person') {
-                 const personId = data.results[0].id;
-                 const credits = await fetchTmdb(`/person/${personId}/combined_credits`);
-                 return (credits.cast || [])
-                     .filter((i: any) => i.media_type === 'movie' || i.media_type === 'tv')
-                     .map((i: any) => transformTmdbItem(i));
-             }
-             return data.results
-                 .filter((i: any) => i.media_type === 'movie' || i.media_type === 'tv')
-                 .map((i: any) => transformTmdbItem(i));
+            // Check for year
+            const yearMatch = query.trim().match(/^\d{4}$/);
+            if (yearMatch) {
+                const year = yearMatch[0];
+                const [movies, tv] = await Promise.all([
+                    fetchTmdb('/discover/movie', { primary_release_year: year, sort_by: 'popularity.desc' }),
+                    fetchTmdb('/discover/tv', { first_air_date_year: year, sort_by: 'popularity.desc' })
+                ]);
+                const m = movies.results.map((i: any) => transformTmdbItem(i, MediaType.MOVIE));
+                const t = tv.results.map((i: any) => transformTmdbItem(i, MediaType.TV_SHOW));
+                return [...m, ...t];
+            }
+
+            const data = await fetchTmdb('/search/multi', { query });
+            if (data.results[0]?.media_type === 'person') {
+                const personId = data.results[0].id;
+                const credits = await fetchTmdb(`/person/${personId}/combined_credits`);
+                return (credits.cast || [])
+                    .filter((i: any) => i.media_type === 'movie' || i.media_type === 'tv')
+                    .map((i: any) => transformTmdbItem(i));
+            }
+            return data.results
+                .filter((i: any) => i.media_type === 'movie' || i.media_type === 'tv')
+                .map((i: any) => transformTmdbItem(i));
         })();
 
         // 2. Fetch from Cinemeta
@@ -401,7 +442,7 @@ export const getMediaDetails = async (id: string, typeHint: MediaType = MediaTyp
                     if (meta && meta.meta) {
                         return transformCinemetaItem(meta.meta);
                     }
-                } catch(e) {
+                } catch (e) {
                     // Try the other type if first failed? No, assume hint is mostly correct or user is unlucky
                 }
                 return null;
@@ -411,11 +452,11 @@ export const getMediaDetails = async (id: string, typeHint: MediaType = MediaTyp
         // Fetch standard TMDB details
         const endpointType = finalType === MediaType.MOVIE ? 'movie' : 'tv';
         const details = await fetchTmdb(`/${endpointType}/${tmdbId}`, {
-            append_to_response: 'credits,external_ids,similar'
+            append_to_response: 'credits,external_ids'
         });
 
         const item = transformTmdbItem(details, finalType);
-        
+
         if (details.credits) {
             item.cast = details.credits.cast.slice(0, 10).map((c: any) => c.name);
             const director = details.credits.crew.find((c: any) => c.job === 'Director');
@@ -433,17 +474,17 @@ export const getMediaDetails = async (id: string, typeHint: MediaType = MediaTyp
     }
 };
 
-export const getSeasonEpisodes = async (tmdbId: string | number, season: number): Promise<Episode[]> => {
+export const getSeasonEpisodes = async (tmdbId: string | number, season: number): Promise<{ episodes: Episode[], seasonPoster?: string }> => {
     if (tmdbId === 0 || tmdbId === '0') {
-        return [];
+        return { episodes: [] };
     }
 
     try {
         const data = await fetchTmdb(`/tv/${tmdbId}/season/${season}`);
-        
-        if (!data.episodes) return [];
 
-        return data.episodes.map((ep: any) => ({
+        if (!data.episodes) return { episodes: [] };
+
+        const episodes = data.episodes.map((ep: any) => ({
             id: String(ep.id),
             title: ep.name,
             episodeNumber: ep.episode_number,
@@ -452,11 +493,17 @@ export const getSeasonEpisodes = async (tmdbId: string | number, season: number)
             rating: ep.vote_average,
             imageUrl: getImageUrl(ep.still_path, 'still'),
             overview: ep.overview,
-            imdbId: undefined 
+            imdbId: undefined,
+            runtime: ep.runtime
         }));
+
+        return {
+            episodes,
+            seasonPoster: getImageUrl(data.poster_path, 'poster')
+        };
     } catch (e) {
         console.error("Episodes Error:", e);
-        return [];
+        return { episodes: [] };
     }
 };
 

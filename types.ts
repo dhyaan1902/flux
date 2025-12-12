@@ -6,7 +6,7 @@ export enum MediaType {
   UNKNOWN = 'UNKNOWN'
 }
 
-export type NavTab = 'home' | 'search' | 'new' | 'downloads' | 'my-netflix' | 'anime';
+export type NavTab = 'home' | 'search' | 'new' | 'library' | 'my-netflix' | 'anime';
 
 export type ServerProvider = 'vidsrc' | 'vidrock';
 
@@ -30,7 +30,8 @@ export interface Episode {
   rating: number;
   imageUrl?: string;
   overview?: string;
-  imdbId?: string; 
+  imdbId?: string;
+  runtime?: number;
 }
 
 export interface MediaItem {
@@ -111,16 +112,16 @@ export interface AnimeSource {
 }
 
 export interface AnimePlayerProps {
-    episode: AnimeEpisode;
-    animeTitle: string;
-    imdbId?: string;
-    anilistId?: string;
-    mode: AnimePreference;
-    language: AnimeLanguage;
-    sourceProvider: AnimeProvider;
-    onSourceProviderChange: (provider: AnimeProvider) => void;
-    onClose: () => void;
-    onProgress: () => void; // New prop to mark watched
+  episode: AnimeEpisode;
+  animeTitle: string;
+  imdbId?: string;
+  anilistId?: string;
+  mode: AnimePreference;
+  language: AnimeLanguage;
+  sourceProvider: AnimeProvider;
+  onSourceProviderChange: (provider: AnimeProvider) => void;
+  onClose: () => void;
+  onProgress: () => void; // New prop to mark watched
 }
 
 export interface MyNetflixTabProps {
@@ -141,10 +142,10 @@ export interface MyNetflixTabProps {
 }
 
 export interface AnimeTabProps {
-    animePreference: AnimePreference;
-    animeLanguage: AnimeLanguage;
-    animeSource: AnimeProvider;
-    onAnimeSourceChange: (source: AnimeProvider) => void;
-    watchHistory: WatchProgress; // Pass down for status checks
-    onUpdateHistory: (id: string, ep: number, title: string, img: string) => void;
+  animePreference: AnimePreference;
+  animeLanguage: AnimeLanguage;
+  animeSource: AnimeProvider;
+  onAnimeSourceChange: (source: AnimeProvider) => void;
+  watchHistory: WatchProgress; // Pass down for status checks
+  onUpdateHistory: (id: string, ep: number, title: string, img: string) => void;
 }
