@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { NavTab, MediaItem, HomeRow, ServerProvider, AnimePreference, AnimeLanguage, AnimeProvider, WatchProgress, AnimeItem, MediaType, Genre } from './types';
+import { NavTab, MediaItem, HomeRow, ServerProvider, WatchProgress, MediaType, Genre } from './types';
 import { fetchHomeDataBatch, fetchGenres, setTmdbApiKey } from './services/gemini';
 import { BottomNav } from './components/BottomNav';
 import { TopBar } from './components/TopBar';
@@ -10,13 +10,32 @@ import { SearchTab } from './components/SearchTab';
 import { MediaDetailModal } from './components/MediaDetailModal';
 import { VideoPlayer } from './components/VideoPlayer';
 import { MyNetflixTab } from './components/MyNetflixTab';
-import { AnimeTab } from './components/AnimeTab';
-import { AnimeDetailModal } from './components/AnimeDetailModal';
-
 import { LibraryTab } from './components/LibraryTab';
+import { OfflineScreen } from './components/OfflineScreen';
 
 const App: React.FC = () => {
     const [activeTab, setActiveTab] = useState<NavTab>('home');
+    const [isOffline, setIsOffline] = useState(!window.navigator.onLine);
+
+    useEffect(() => {
+        const handleOnline = () => setIsOffline(false);
+        const handleOffline = () => setIsOffline(true);
+
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
+
+        return () => {
+            window.removeEventListener('online', handleOnline);
+            window.removeEventListener('offline', handleOffline);
+        };
+    }, []);
+
+    const retryConnection = () => {
+        if (window.navigator.onLine) {
+            setIsOffline(false);
+            window.location.reload();
+        }
+    };
 
     // Infinite Scroll State
     const [homeRows, setHomeRows] = useState<HomeRow[]>([]);
@@ -25,15 +44,11 @@ const App: React.FC = () => {
     const [hasMore, setHasMore] = useState(true);
     const [offset, setOffset] = useState(0);
 
-    // Cast Modal State
-
-
     // Deduplication Ref
     const seenIds = useRef<Set<string>>(new Set());
 
     const [heroItem, setHeroItem] = useState<MediaItem | null>(null);
     const [selectedItem, setSelectedItem] = useState<MediaItem | null>(null);
-    const [selectedAnimeItem, setSelectedAnimeItem] = useState<AnimeItem | null>(null);
 
     // Observer for Infinite Scroll
     const observer = useRef<IntersectionObserver | null>(null);
@@ -77,7 +92,6 @@ const App: React.FC = () => {
 
     const [server, setServer] = useState<ServerProvider>(() => {
         try {
-            // Fallback safely if previous value was a now-deleted provider
             const saved = localStorage.getItem('serverProvider') as string;
             if (saved === 'vidsrc' || saved === 'vidrock') return saved;
             return 'vidsrc';
@@ -95,30 +109,6 @@ const App: React.FC = () => {
         try { return localStorage.getItem('tmdbApiKey') || ''; } catch { return ''; }
     });
 
-    const [animePreference, setAnimePreference] = useState<AnimePreference>(() => {
-        try {
-            return (localStorage.getItem('animePreference') as AnimePreference) || 'consumet';
-        } catch {
-            return 'consumet';
-        }
-    });
-
-    const [animeLanguage, setAnimeLanguage] = useState<AnimeLanguage>(() => {
-        try {
-            return (localStorage.getItem('animeLanguage') as AnimeLanguage) || 'sub';
-        } catch {
-            return 'sub';
-        }
-    });
-
-    const [animeSource, setAnimeSource] = useState<AnimeProvider>(() => {
-        try {
-            return (localStorage.getItem('animeSource') as AnimeProvider) || 'animepahe';
-        } catch {
-            return 'animepahe';
-        }
-    });
-
     // --- EFFECT SAVERS ---
 
     useEffect(() => {
@@ -134,25 +124,12 @@ const App: React.FC = () => {
     }, [server]);
 
     useEffect(() => {
-        localStorage.setItem('animePreference', animePreference);
-    }, [animePreference]);
-
-    useEffect(() => {
-        localStorage.setItem('animeLanguage', animeLanguage);
-    }, [animeLanguage]);
-
-    useEffect(() => {
-        localStorage.setItem('animeSource', animeSource);
-    }, [animeSource]);
-
-    useEffect(() => {
         localStorage.setItem('userName', userName);
     }, [userName]);
 
-
     useEffect(() => {
         localStorage.setItem('tmdbApiKey', tmdbApiKey);
-        setTmdbApiKey(tmdbApiKey); // Update the service singleton
+        setTmdbApiKey(tmdbApiKey);
     }, [tmdbApiKey]);
 
     // --- PLAYER STATE ---
@@ -167,24 +144,23 @@ const App: React.FC = () => {
     const stateRef = useRef({
         activeTab,
         playerOpen: playerState.isOpen,
-        hasItem: !!selectedItem,
-        hasAnime: !!selectedAnimeItem
+        hasItem: !!selectedItem
     });
 
     useEffect(() => {
         stateRef.current = {
             activeTab,
             playerOpen: playerState.isOpen,
-            hasItem: !!selectedItem,
+            hasItem: !!selectedItem
         };
-    }, [activeTab, playerState.isOpen, selectedItem, selectedAnimeItem]);
+    }, [activeTab, playerState.isOpen, selectedItem]);
 
     useEffect(() => {
         // Trap history on mount
         window.history.pushState(null, '', window.location.href);
 
         const handlePopState = (e: PopStateEvent) => {
-            const { activeTab, playerOpen, hasItem, hasAnime, isCastOpen } = stateRef.current;
+            const { activeTab, playerOpen, hasItem } = stateRef.current;
 
             let handled = false;
 
@@ -192,9 +168,6 @@ const App: React.FC = () => {
             if (playerOpen) {
                 setPlayerState(prev => ({ ...prev, isOpen: false }));
                 if (document.fullscreenElement) document.exitFullscreen().catch(() => { });
-                handled = true;
-            } else if (hasAnime) {
-                setSelectedAnimeItem(null);
                 handled = true;
             } else if (hasItem) {
                 setSelectedItem(null);
@@ -205,7 +178,6 @@ const App: React.FC = () => {
             }
 
             if (handled) {
-                // Re-arm the trap so the next back press is also caught
                 window.history.pushState(null, '', window.location.href);
             }
         };
@@ -216,11 +188,9 @@ const App: React.FC = () => {
 
     // --- DATA LOADING ---
 
-    // Load Genres on Mount and Select Random
     useEffect(() => {
         fetchGenres().then(data => {
             setGenres(data);
-            // Randomly select a genre on initial app load
             if (data.length > 0) {
                 const randomIndex = Math.floor(Math.random() * data.length);
                 setSelectedGenreId(data[randomIndex].id);
@@ -228,7 +198,6 @@ const App: React.FC = () => {
         });
     }, []);
 
-    // Initial Load (when Genre, Type or Tab changes)
     useEffect(() => {
         if (activeTab !== 'home') return;
 
@@ -239,10 +208,9 @@ const App: React.FC = () => {
             setHomeRows([]);
             setOffset(0);
             setHasMore(true);
-            seenIds.current.clear(); // Clear dedup set on refresh
+            seenIds.current.clear();
 
             const genreName = selectedGenreId ? genres.find(g => g.id === selectedGenreId)?.name : undefined;
-            // Reduced batch size to 2 to improve memory and initial load -> Increased back to 5 for infinite scroll feel
             const { rows, hasMore: more } = await fetchHomeDataBatch(0, 5, selectedGenreId || undefined, genreName, seenIds.current, mediaTypeFilter);
 
             if (isMounted) {
@@ -251,7 +219,6 @@ const App: React.FC = () => {
                 setHasMore(more);
 
                 if (rows.length > 0) {
-                    // Hero selection logic: prefer first row, random item
                     const firstRowItems = rows[0].items;
                     if (firstRowItems.length > 0) {
                         const randomItemIndex = Math.floor(Math.random() * Math.min(5, firstRowItems.length));
@@ -268,13 +235,11 @@ const App: React.FC = () => {
         return () => { isMounted = false; };
     }, [selectedGenreId, genres, activeTab, mediaTypeFilter]);
 
-    // Infinite Scroll Loader
     const loadMoreRows = async () => {
         if (loadingMore || !hasMore) return;
         setLoadingMore(true);
 
         const genreName = selectedGenreId ? genres.find(g => g.id === selectedGenreId)?.name : undefined;
-        // Load 5 rows at a time
         const { rows, hasMore: more } = await fetchHomeDataBatch(offset, 5, selectedGenreId || undefined, genreName, seenIds.current, mediaTypeFilter);
 
         setHomeRows(prev => [...prev, ...rows]);
@@ -313,7 +278,7 @@ const App: React.FC = () => {
 
     const updateWatchHistory = (
         id: string,
-        type: 'MOVIE' | 'TV_SHOW' | 'ANIME',
+        type: 'MOVIE' | 'TV_SHOW',
         title: string,
         posterUrl: string | undefined,
         season: number = 1,
@@ -378,14 +343,11 @@ const App: React.FC = () => {
         }
     };
 
-    const handleOpenAnimeFromHistory = (item: AnimeItem) => {
-        setSelectedAnimeItem(item);
-        setActiveTab('anime');
-    };
-
     return (
-        <div className="bg-[#000000] min-h-screen text-white font-sans overflow-x-hidden pt-safe pb-safe selection:bg-red-900 selection:text-white">
+        <div className="min-h-screen bg-black text-white font-sans selection:bg-red-500/30">
+            {isOffline && <OfflineScreen onRetry={retryConnection} />}
 
+            {/* Conditional Rendering of Tabs */}
             {activeTab === 'home' && (
                 <>
                     <TopBar
@@ -394,7 +356,7 @@ const App: React.FC = () => {
                         onSelectGenre={setSelectedGenreId}
                         mediaType={mediaTypeFilter}
                         onSelectMediaType={setMediaTypeFilter}
-                        onCastClick={() => { }} // No-op as cast is removed from TopBar UI
+                        onCastClick={() => { }}
                         userName={userName}
                     />
                     <div className="pb-24">
@@ -423,7 +385,6 @@ const App: React.FC = () => {
                                         />
                                     ))}
 
-                                    {/* Loading Skeleton / Sentinel */}
                                     <div ref={bottomRef} className="h-24 w-full flex items-center justify-center">
                                         {loadingMore && <div className="w-6 h-6 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />}
                                     </div>
@@ -444,31 +405,13 @@ const App: React.FC = () => {
                 <SearchTab onItemClick={setSelectedItem} />
             )}
 
-            {activeTab === 'anime' && (
-                <AnimeTab
-                    animePreference={animePreference}
-                    animeLanguage={animeLanguage}
-                    animeSource={animeSource}
-                    onAnimeSourceChange={setAnimeSource}
-                    watchHistory={watchHistory}
-                    onUpdateHistory={(id, ep, title, img) => updateWatchHistory(id, 'ANIME', title, img, 1, ep)}
-                />
-            )}
-
             {activeTab === 'my-netflix' && (
                 <MyNetflixTab
                     myList={myList}
                     watchHistory={watchHistory}
                     onItemClick={setSelectedItem}
-                    onAnimeClick={handleOpenAnimeFromHistory}
                     currentServer={server}
                     onServerChange={setServer}
-                    animePreference={animePreference}
-                    onAnimePreferenceChange={setAnimePreference}
-                    animeLanguage={animeLanguage}
-                    onAnimeLanguageChange={setAnimeLanguage}
-                    animeSource={animeSource}
-                    onAnimeSourceChange={setAnimeSource}
                     onRemoveFromMyList={removeFromMyList}
                     onRemoveFromHistory={removeFromHistory}
                     userName={userName}
@@ -493,7 +436,6 @@ const App: React.FC = () => {
 
             <BottomNav activeTab={activeTab} onTabChange={setActiveTab} userName={userName} />
 
-            {/* MEDIA MODAL (Movies/TV) */}
             {selectedItem && (
                 <MediaDetailModal
                     item={selectedItem}
@@ -506,19 +448,6 @@ const App: React.FC = () => {
                 />
             )}
 
-            {/* ANIME MODAL */}
-            {selectedAnimeItem && activeTab !== 'anime' && (
-                <AnimeDetailModal
-                    anime={selectedAnimeItem}
-                    onClose={() => setSelectedAnimeItem(null)}
-                    onPlay={() => { }}
-                    watchHistory={watchHistory}
-                />
-            )}
-
-
-
-            {/* VIDEO PLAYER (Movies/TV) */}
             {playerState.isOpen && playerState.item && (
                 <VideoPlayer
                     item={playerState.item}
@@ -536,10 +465,8 @@ const App: React.FC = () => {
                     )}
                 />
             )}
-
         </div>
     );
 };
 
 export default App;
-

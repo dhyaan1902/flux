@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Home, Search, Download, Ghost, Library } from 'lucide-react';
+import { Home, Search, Library } from 'lucide-react';
 import { NavTab } from '../types';
 
 interface BottomNavProps {
@@ -14,7 +14,6 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, us
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'search', icon: Search, label: 'Search' },
     { id: 'library', icon: Library, label: 'Library' },
-    { id: 'anime', icon: Ghost, label: 'Anime' },
   ];
 
   const getInitials = (name: string) => {
@@ -25,22 +24,24 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, us
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-[#121212] border-t border-[#262626] z-50 pb-safe">
-      <div className="flex justify-between items-center px-4 py-3">
+    <div className="fixed bottom-0 left-0 right-0 glass border-t border-white/5 z-50 pb-safe">
+      <div className="flex justify-around items-center px-2 py-2 h-16">
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
           return (
             <button
               key={item.id}
               onClick={() => onTabChange(item.id as NavTab)}
-              className="flex flex-col items-center gap-1 w-full"
+              className="relative flex flex-col items-center justify-center w-full h-full transition-all active:scale-90"
             >
+              {/* Material You Active Indicator */}
+              <div className={`absolute top-0 w-12 h-8 rounded-full transition-all duration-300 ${isActive ? 'bg-red-600/20 scale-100 opacity-100' : 'scale-75 opacity-0'}`} />
+
               <item.icon
-                className={`w-6 h-6 ${isActive ? 'text-white' : 'text-[#808080]'}`}
+                className={`w-6 h-6 mb-1 transition-colors duration-300 ${isActive ? 'text-red-500' : 'text-gray-400'}`}
                 strokeWidth={isActive ? 2.5 : 2}
-                fill={isActive && item.id !== 'search' && item.id !== 'downloads' ? 'currentColor' : 'none'}
               />
-              <span className={`text-[10px] ${isActive ? 'text-white font-medium' : 'text-[#808080]'}`}>
+              <span className={`text-[10px] transition-all duration-300 ${isActive ? 'text-white font-semibold' : 'text-gray-500 font-medium'}`}>
                 {item.label}
               </span>
             </button>
@@ -50,18 +51,18 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, us
         {/* My Netflix Tab */}
         <button
           onClick={() => onTabChange('my-netflix')}
-          className="flex flex-col items-center gap-1 w-full"
+          className="relative flex flex-col items-center justify-center w-full h-full transition-all active:scale-90"
         >
-          <div className={`w-6 h-6 rounded flex items-center justify-center text-[9px] font-bold border ${activeTab === 'my-netflix'
-            ? 'bg-transparent text-white border-white'
-            : 'bg-transparent text-transparent border-[#808080] overflow-hidden'
+          <div className={`absolute top-0 w-12 h-8 rounded-full transition-all duration-300 ${activeTab === 'my-netflix' ? 'bg-red-600/20 scale-100 opacity-100' : 'scale-75 opacity-0'}`} />
+
+          <div className={`w-6 h-6 rounded flex items-center justify-center text-[9px] font-bold border transition-all duration-300 mb-1 ${activeTab === 'my-netflix'
+            ? 'bg-red-600 text-white border-red-500 scale-110'
+            : 'bg-[#262626] text-gray-400 border-white/10'
             }`}>
-            {/* Simulate User Avatar or Empty Frame */}
-            {activeTab !== 'my-netflix' && <div className="w-full h-full bg-blue-600"></div>}
-            {activeTab === 'my-netflix' && getInitials(userName)}
+            {getInitials(userName)}
           </div>
-          <span className={`text-[10px] ${activeTab === 'my-netflix' ? 'text-white font-medium' : 'text-[#808080]'}`}>
-            My Netflix
+          <span className={`text-[10px] transition-all duration-300 ${activeTab === 'my-netflix' ? 'text-white font-semibold' : 'text-gray-500 font-medium'}`}>
+            My Profile
           </span>
         </button>
       </div>

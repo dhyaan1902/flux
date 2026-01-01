@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { MediaItem } from '../types';
-import { Play } from 'lucide-react';
 
 interface MediaCardProps {
   item: MediaItem;
@@ -17,12 +16,12 @@ export const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
 
   return (
     <div
-      className="relative w-full aspect-[2/3] rounded-md overflow-hidden cursor-pointer active:opacity-80 transition-opacity"
+      className="relative w-full aspect-[2/3] rounded-lg overflow-hidden cursor-pointer active:scale-[0.96] transition-all duration-200 shadow-lg"
       onClick={() => onClick(item)}
     >
       {/* Skeleton Loading State */}
       {!isLoaded && (
-        <div className="absolute inset-0 bg-[#1a1a1a] z-0" />
+        <div className="absolute inset-0 skeleton z-0" />
       )}
 
       <img
@@ -31,8 +30,11 @@ export const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
         loading="lazy"
         decoding="async"
         onLoad={() => setIsLoaded(true)}
-        className={`w-full h-full object-cover rounded-md ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+        className={`w-full h-full object-cover rounded-lg ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
       />
+
+      {/* Tap Overlay */}
+      <div className="absolute inset-0 bg-white/5 opacity-0 active:opacity-100 transition-opacity" />
     </div>
   );
 };

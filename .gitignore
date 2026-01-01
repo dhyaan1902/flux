@@ -1,27 +1,49 @@
+# Logic
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Production
+build/
+bin/
+obj/
+
+# Android
+android/.gradle
+android/build
+android/app/build
+android/out
+android/local.properties
+*.apk
+*.aab
+*.keystore
+!android/app/release-key.keystore
+
+# iOS
+ios/App/App/public
+ios/App/Pods
+ios/App/build
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Versioning
+.env
+.env.production
+.env.local
+
 # Logs
-logs
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+capacitor.config.json
 
-node_modules
-dist
-dist-ssr
-*.local
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-android
-capacitor.config.ts
-
+# Temporary
+aligned.apk
+temp/

@@ -1,20 +1,13 @@
 
-
 export enum MediaType {
   MOVIE = 'MOVIE',
   TV_SHOW = 'TV_SHOW',
   UNKNOWN = 'UNKNOWN'
 }
 
-export type NavTab = 'home' | 'search' | 'new' | 'library' | 'my-netflix' | 'anime';
+export type NavTab = 'home' | 'search' | 'new' | 'library' | 'my-netflix';
 
 export type ServerProvider = 'vidsrc' | 'vidrock';
-
-export type AnimeProvider = 'gogoanime' | 'zoro' | 'animepahe';
-
-export type AnimePreference = 'consumet' | 'vidsrc';
-
-export type AnimeLanguage = 'sub' | 'dub';
 
 export interface Genre {
   id: number;
@@ -73,79 +66,25 @@ export interface WatchProgress {
     watchedEpisodes: string[]; // Array of "S{s}E{e}" strings or "MOVIE"
     title: string; // Saved for quick display in "Continue Watching"
     posterUrl?: string;
-    type: 'MOVIE' | 'TV_SHOW' | 'ANIME';
+    type: 'MOVIE' | 'TV_SHOW';
   }
-}
-
-// --- ANIME TYPES ---
-
-export interface AnimeItem {
-  id: string; // AniList ID
-  imdbId?: string; // Extracted from External Links
-  title: {
-    romaji: string;
-    english: string;
-    native: string;
-  };
-  coverImage: string;
-  bannerImage: string;
-  description: string;
-  genres: string[];
-  averageScore: number;
-  seasonYear?: number;
-  episodes?: number;
-  status?: string;
-}
-
-export interface AnimeEpisode {
-  id: string; // Consumet Episode ID
-  number: number;
-  title?: string;
-  image?: string;
-  description?: string;
-}
-
-export interface AnimeSource {
-  url: string;
-  isM3U8: boolean;
-  quality: string;
-}
-
-export interface AnimePlayerProps {
-  episode: AnimeEpisode;
-  animeTitle: string;
-  imdbId?: string;
-  anilistId?: string;
-  mode: AnimePreference;
-  language: AnimeLanguage;
-  sourceProvider: AnimeProvider;
-  onSourceProviderChange: (provider: AnimeProvider) => void;
-  onClose: () => void;
-  onProgress: () => void; // New prop to mark watched
 }
 
 export interface MyNetflixTabProps {
   myList: MediaItem[];
   watchHistory: WatchProgress; // New prop
   onItemClick: (item: MediaItem) => void;
-  onAnimeClick: (item: AnimeItem) => void; // Handle continue watching anime
   currentServer: ServerProvider;
   onServerChange: (server: ServerProvider) => void;
-  animePreference: AnimePreference;
-  onAnimePreferenceChange: (pref: AnimePreference) => void;
-  animeLanguage: AnimeLanguage;
-  onAnimeLanguageChange: (lang: AnimeLanguage) => void;
-  animeSource: AnimeProvider;
-  onAnimeSourceChange: (source: AnimeProvider) => void;
   onRemoveFromMyList: (item: MediaItem) => void;
   onRemoveFromHistory: (id: string) => void;
 }
 
-export interface AnimeTabProps {
-  animePreference: AnimePreference;
-  animeLanguage: AnimeLanguage;
-  animeSource: AnimeProvider;
-  onAnimeSourceChange: (source: AnimeProvider) => void;
-  watchHistory: WatchProgress; // Pass down for status checks
-  onUpdateHistory: (id: string, ep: number, title: string, img: string) => void;
+// --- DOWNLOAD TYPES ---
+
+export interface DownloadLink {
+  quality: string;    // e.g., "1080p", "720p"
+  size: string;       // e.g., "1.79 GB"
+  url: string;        // Download URL
+  category: string;   // e.g., "Mp4 Downloads", "MKV Downloads"
 }

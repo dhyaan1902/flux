@@ -1,20 +1,14 @@
+
 import React, { useState } from 'react';
-import { MediaItem, ServerProvider, AnimePreference, AnimeLanguage, AnimeProvider, WatchProgress, AnimeItem, MediaType } from '../types';
-import { ChevronRight, Bell, Settings, Wifi, Smartphone, Menu, Ghost, PlayCircle, Clock, X, Edit3, Key } from 'lucide-react';
+import { MediaItem, ServerProvider, WatchProgress, MediaType } from '../types';
+import { Settings, Wifi, Menu, PlayCircle, Clock, X, Edit3, Key } from 'lucide-react';
 
 interface MyNetflixTabProps {
     myList: MediaItem[];
     watchHistory: WatchProgress;
     onItemClick: (item: MediaItem) => void;
-    onAnimeClick: (item: AnimeItem) => void;
     currentServer: ServerProvider;
     onServerChange: (server: ServerProvider) => void;
-    animePreference: AnimePreference;
-    onAnimePreferenceChange: (pref: AnimePreference) => void;
-    animeLanguage: AnimeLanguage;
-    onAnimeLanguageChange: (lang: AnimeLanguage) => void;
-    animeSource: AnimeProvider;
-    onAnimeSourceChange: (source: AnimeProvider) => void;
     onRemoveFromMyList: (item: MediaItem) => void;
     onRemoveFromHistory: (id: string) => void;
     userName: string;
@@ -27,15 +21,8 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
     myList,
     watchHistory,
     onItemClick,
-    onAnimeClick,
     currentServer,
     onServerChange,
-    animePreference,
-    onAnimePreferenceChange,
-    animeLanguage,
-    onAnimeLanguageChange,
-    animeSource,
-    onAnimeSourceChange,
     onRemoveFromMyList,
     onRemoveFromHistory,
     userName,
@@ -73,40 +60,24 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
     const saveKey = () => {
         setIsEditingKey(false);
         setIsApiKeyLocked(true);
-        // Persistance is handled by parent effect on apiKey change
     };
 
-    // Convert history map to array and sort by last watched
     const continueWatching = Object.entries(watchHistory)
         .map(([id, data]) => ({ id, ...(data as any) }))
         .sort((a, b) => b.lastWatched - a.lastWatched);
 
     const handleContinue = (item: any) => {
-        if (item.type === 'ANIME') {
-            // Reconstruct partial AnimeItem for navigation
-            onAnimeClick({
-                id: item.id,
-                title: { romaji: item.title, english: item.title, native: item.title },
-                coverImage: item.posterUrl,
-                bannerImage: item.posterUrl,
-                genres: [],
-                description: '',
-                averageScore: 0
-            } as AnimeItem);
-        } else {
-            // Reconstruct partial MediaItem for navigation
-            onItemClick({
-                id: item.id,
-                tmdbId: Number(item.id), // Assuming ID is tmdbId
-                title: item.title,
-                type: item.type === 'MOVIE' ? MediaType.MOVIE : MediaType.TV_SHOW,
-                posterUrl: item.posterUrl,
-                year: '',
-                overview: '',
-                genres: [],
-                cast: []
-            } as MediaItem);
-        }
+        onItemClick({
+            id: item.id,
+            tmdbId: Number(item.id),
+            title: item.title,
+            type: item.type === 'MOVIE' ? MediaType.MOVIE : MediaType.TV_SHOW,
+            posterUrl: item.posterUrl,
+            year: '',
+            overview: '',
+            genres: [],
+            cast: []
+        } as MediaItem);
     };
 
     const saveName = () => {
@@ -152,7 +123,6 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                 )}
             </div>
 
-            {/* CONTINUE WATCHING ROW */}
             {continueWatching.length > 0 && (
                 <div className="py-6 border-b border-gray-800/50">
                     <h3 className="text-white font-bold mb-3 px-4 flex items-center gap-2">
@@ -175,7 +145,6 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <PlayCircle className="w-8 h-8 text-white/80 group-hover:scale-110 transition-transform" />
                                     </div>
-                                    {/* Progress Bar (Simulated) */}
                                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-600">
                                         <div className="h-full bg-red-600 w-1/2"></div>
                                     </div>
@@ -198,7 +167,6 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                 </div>
             )}
 
-            {/* API SETTINGS */}
             <div className="px-4 py-6 border-b border-gray-800/50">
                 <h3 className="text-white font-bold mb-3 flex items-center gap-2">
                     <Key className="w-4 h-4 text-yellow-500" />
@@ -261,8 +229,6 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                             )}
                         </p>
                     </div>
-
-
                 </div>
             </div>
 
@@ -296,57 +262,6 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                         📺 Embed player - reliable across all devices
                     </p>
                 </div>
-            </div>
-
-            <div className="px-4 py-6 border-b border-gray-800/50">
-                <h3 className="text-white font-bold mb-3 flex items-center gap-2">
-                    <Ghost className="w-4 h-4 text-indigo-500" />
-                    Anime Settings
-                </h3>
-
-                <div className="mb-4">
-                    <span className="text-xs text-gray-400 font-medium mb-2 block ml-1">Provider Mode</span>
-                    <div className="bg-[#1a1a1a] rounded-lg p-1.5 flex gap-1">
-                        <button
-                            onClick={() => onAnimePreferenceChange('consumet')}
-                            className={`flex-1 py-2 text-xs md:text-sm font-medium rounded transition-all ${animePreference === 'consumet'
-                                ? 'bg-[#333] text-white shadow-sm ring-1 ring-white/10'
-                                : 'text-gray-400 hover:text-white'
-                                }`}
-                        >
-                            Consumet
-                        </button>
-                        <button
-                            onClick={() => onAnimePreferenceChange('vidsrc')}
-                            className={`flex-1 py-2 text-xs md:text-sm font-medium rounded transition-all ${animePreference === 'vidsrc'
-                                ? 'bg-[#333] text-white shadow-sm ring-1 ring-white/10'
-                                : 'text-gray-400 hover:text-white'
-                                }`}
-                        >
-                            VidSrc
-                        </button>
-                    </div>
-                </div>
-
-                {animePreference === 'consumet' && (
-                    <div className="mb-4 animate-in fade-in duration-300">
-                        <span className="text-xs text-gray-400 font-medium mb-2 block ml-1">Consumet Source</span>
-                        <div className="bg-[#1a1a1a] rounded-lg p-1.5 flex gap-1">
-                            {(['animepahe', 'gogoanime', 'zoro'] as AnimeProvider[]).map((p) => (
-                                <button
-                                    key={p}
-                                    onClick={() => onAnimeSourceChange(p)}
-                                    className={`flex-1 py-2 text-xs md:text-sm font-medium rounded transition-all capitalize ${animeSource === p
-                                        ? 'bg-[#333] text-white shadow-sm ring-1 ring-white/10'
-                                        : 'text-gray-400 hover:text-white'
-                                        }`}
-                                >
-                                    {p}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                )}
             </div>
 
             <div className="px-4 pt-8">

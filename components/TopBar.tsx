@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import { ChevronDown } from 'lucide-react';
 import { Genre, MediaType } from '../types';
 
 interface TopBarProps {
@@ -19,23 +18,21 @@ export const TopBar: React.FC<TopBarProps> = ({
     onSelectGenre,
     mediaType,
     onSelectMediaType,
-    onCastClick,
     userName
 }) => {
     const [scrolled, setScrolled] = useState(false);
 
-
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
+            setScrolled(window.scrollY > 20);
         };
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     const handleCategoryClick = (type: MediaType | null) => {
         onSelectMediaType(type);
-        if (type === null) onSelectGenre(null); // Reset genre when clicking All
+        if (type === null) onSelectGenre(null);
     };
 
     const getInitials = (name: string) => {
@@ -46,60 +43,63 @@ export const TopBar: React.FC<TopBarProps> = ({
     };
 
     return (
-        <div className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-black/95 backdrop-blur-sm`}>
-            <div className="flex items-center justify-between px-4 py-2">
-                {/* Logo */}
+        <div className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 pt-safe ${scrolled ? 'glass pb-2' : 'bg-gradient-to-b from-black/80 to-transparent pb-4'
+            }`}>
+            <div className="flex items-center justify-between px-5 py-3">
+                {/* Logo or Brand */}
                 <div className="flex items-center gap-4">
-                    <img
-                        src="/realnet.png"
-                        alt="Netflix"
-                        className="h-6 object-contain" // Slightly smaller logo
-                    />
+                    <h1 className="text-red-600 font-black text-2xl tracking-tighter">FLUX</h1>
                 </div>
 
-                {/* Right Icons */}
+                {/* Right Profile */}
                 <div className="flex items-center gap-4 text-white">
-                    <div className="w-6 h-6 rounded bg-blue-600 flex items-center justify-center text-[10px] font-bold">
+                    <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-[11px] font-bold border border-white/20 active:scale-90 transition-transform shadow-lg shadow-blue-900/20">
                         {getInitials(userName)}
                     </div>
                 </div>
             </div>
 
             {/* Category Pills - Scrollable Row */}
-            <div
-                className={`w-full overflow-x-auto scrollbar-hide px-4 pb-3 transition-all duration-300 ${scrolled ? 'opacity-0 -translate-y-4 pointer-events-none h-0 pb-0' : 'opacity-100 translate-y-0 h-auto'
-                    }`}
-            >
-                <div className="flex items-center gap-2.5 pr-4 min-w-max relative">
-                    {/* TV Shows */}
+            <div className={`w-full overflow-x-auto scrollbar-hide px-5 transition-all duration-500 overflow-hidden ${scrolled ? 'h-0 opacity-0 pointer-events-none' : 'h-10 opacity-100'
+                }`}>
+                <div className="flex items-center gap-3 pr-4 min-w-max">
+                    <button
+                        onClick={() => handleCategoryClick(null)}
+                        className={`px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all border ${mediaType === null && selectedGenreId === null
+                                ? 'bg-white text-black border-white'
+                                : 'bg-white/5 text-gray-300 border-white/10'
+                            }`}
+                    >
+                        All
+                    </button>
+
                     <button
                         onClick={() => handleCategoryClick(MediaType.TV_SHOW)}
-                        className={`px-3.5 py-1.5 rounded-full text-[11px] font-medium transition-all ${mediaType === MediaType.TV_SHOW
-                            ? 'bg-white text-black font-bold'
-                            : 'bg-transparent text-gray-200 border border-white/20 hover:border-white/40'
+                        className={`px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all border ${mediaType === MediaType.TV_SHOW
+                                ? 'bg-white text-black border-white'
+                                : 'bg-white/5 text-gray-300 border-white/10'
                             }`}
                     >
                         TV Shows
                     </button>
 
-                    {/* Movies */}
                     <button
                         onClick={() => handleCategoryClick(MediaType.MOVIE)}
-                        className={`px-3.5 py-1.5 rounded-full text-[11px] font-medium transition-all ${mediaType === MediaType.MOVIE
-                            ? 'bg-white text-black font-bold'
-                            : 'bg-transparent text-gray-200 border border-white/20 hover:border-white/40'
+                        className={`px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all border ${mediaType === MediaType.MOVIE
+                                ? 'bg-white text-black border-white'
+                                : 'bg-white/5 text-gray-300 border-white/10'
                             }`}
                     >
                         Movies
                     </button>
 
-                    {genres.map((genre) => (
+                    {genres.slice(0, 10).map((genre) => (
                         <button
                             key={genre.id}
                             onClick={() => onSelectGenre(genre.id)}
-                            className={`px-3.5 py-1.5 rounded-full text-[11px] font-medium transition-all whitespace-nowrap ${selectedGenreId === genre.id
-                                ? 'bg-white text-black font-bold'
-                                : 'bg-transparent text-gray-200 border border-white/20 hover:border-white/40'
+                            className={`px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all border whitespace-nowrap ${selectedGenreId === genre.id
+                                    ? 'bg-white text-black border-white'
+                                    : 'bg-white/5 text-gray-300 border-white/10'
                                 }`}
                         >
                             {genre.name}
@@ -110,4 +110,3 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
     );
 };
-
