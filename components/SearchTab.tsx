@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, X, PlayCircle, Star, Film, Tv } from 'lucide-react';
 import { MediaItem, MediaType } from '../types';
+import { MediaCard } from './MediaCard';
 import { searchMediaCatalog, getTopSearches } from '../services/gemini';
 
 interface SearchTabProps {
@@ -51,7 +52,7 @@ export const SearchTab: React.FC<SearchTabProps> = ({ onItemClick }) => {
             {/* Sticky Header */}
             <div className="sticky top-0 z-30 glass backdrop-blur-3xl pb-4 border-b border-white/5">
                 <div className="p-4">
-                    <div className="flex items-center bg-white/5 rounded-2xl h-14 px-5 transition-all focus-within:bg-white/10 ring-1 ring-white/10 focus-within:ring-red-600/50">
+                    <div className="flex items-center bg-white/5 rounded-xl h-14 px-5 transition-all focus-within:bg-white/10 ring-1 ring-white/10 focus-within:ring-red-600/50">
                         <Search className="w-5 h-5 text-gray-500 mr-4" />
                         <input
                             autoFocus
@@ -74,19 +75,19 @@ export const SearchTab: React.FC<SearchTabProps> = ({ onItemClick }) => {
                     <div className="flex items-center gap-3 px-5 animate-in fade-in slide-in-from-top-2 duration-300">
                         <button
                             onClick={() => setFilter('ALL')}
-                            className={`px-6 py-2 rounded-xl text-xs font-bold transition-all ${filter === 'ALL' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'bg-white/5 text-gray-400 border border-white/5'}`}
+                            className={`px-6 py-2 rounded-md text-xs font-bold transition-all ${filter === 'ALL' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'bg-white/5 text-gray-400 border border-white/5'}`}
                         >
                             All
                         </button>
                         <button
                             onClick={() => setFilter('MOVIE')}
-                            className={`px-5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${filter === 'MOVIE' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'bg-white/5 text-gray-400 border border-white/5'}`}
+                            className={`px-5 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${filter === 'MOVIE' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'bg-white/5 text-gray-400 border border-white/5'}`}
                         >
                             <Film className="w-3.5 h-3.5" /> Movies
                         </button>
                         <button
                             onClick={() => setFilter('TV')}
-                            className={`px-5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${filter === 'TV' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'bg-white/5 text-gray-400 border border-white/5'}`}
+                            className={`px-5 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${filter === 'TV' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'bg-white/5 text-gray-400 border border-white/5'}`}
                         >
                             <Tv className="w-3.5 h-3.5" /> TV
                         </button>
@@ -103,18 +104,8 @@ export const SearchTab: React.FC<SearchTabProps> = ({ onItemClick }) => {
                     <div className="space-y-6">
                         <div className="grid grid-cols-3 gap-3">
                             {filteredResults.map(item => (
-                                <div
-                                    key={item.id}
-                                    onClick={() => onItemClick(item)}
-                                    className="group relative aspect-[2/3] bg-white/5 rounded-xl overflow-hidden cursor-pointer active:scale-95 transition-all duration-300"
-                                >
-                                    <img
-                                        src={item.posterUrl || `https://via.placeholder.com/300x450?text=No+Poster`}
-                                        className="w-full h-full object-cover"
-                                        loading="lazy"
-                                        alt={item.title}
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div key={item.id} className="animate-in fade-in duration-500">
+                                    <MediaCard item={item} onClick={onItemClick} />
                                 </div>
                             ))}
                         </div>
@@ -127,9 +118,9 @@ export const SearchTab: React.FC<SearchTabProps> = ({ onItemClick }) => {
                                 <div
                                     key={item.id}
                                     onClick={() => onItemClick(item)}
-                                    className="flex items-center gap-4 bg-white/5 p-3 rounded-2xl cursor-pointer transition-all border border-white/5 active:bg-white/10 active:scale-[0.98]"
+                                    className="flex items-center gap-4 bg-white/5 p-3 rounded-xl cursor-pointer transition-all border border-white/5 active:bg-white/10 active:scale-[0.98]"
                                 >
-                                    <div className="relative w-28 aspect-[16/9] bg-[#1e1e1e] flex-shrink-0 rounded-lg overflow-hidden border border-white/5">
+                                    <div className="relative w-28 aspect-[16/9] bg-[#1e1e1e] flex-shrink-0 rounded-md overflow-hidden border border-white/5">
                                         <img
                                             src={item.backdropUrl || item.posterUrl}
                                             className="w-full h-full object-cover"

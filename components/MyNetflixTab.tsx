@@ -91,9 +91,6 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
         <div className="min-h-screen bg-black pb-24">
             <div className="pt-safe px-4 pb-4 sticky top-0 bg-black/95 z-20 flex justify-between items-center">
                 <h1 className="text-2xl font-bold text-white">My Netflix</h1>
-                <div className="flex items-center gap-4">
-                    <button className="text-white"><Menu className="w-6 h-6" /></button>
-                </div>
             </div>
 
             <div className="flex flex-col items-center py-6 border-b border-gray-800/50">
@@ -173,7 +170,7 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                     API Configuration
                 </h3>
                 <div className="space-y-3">
-                    <div className="bg-[#1a1a1a] p-3 rounded-lg border border-white/5">
+                    <div className="bg-[#1a1a1a] p-3 rounded-md border border-white/5">
                         <label className="text-xs text-gray-400 block mb-1">TMDB API Key (Private)</label>
 
                         <div className="flex gap-2">
@@ -237,7 +234,7 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                     <Wifi className="w-4 h-4 text-red-500" />
                     Playback Server
                 </h3>
-                <div className="bg-[#1a1a1a] rounded-lg p-2 flex flex-col gap-2">
+                <div className="bg-[#1a1a1a] rounded-md p-2 flex flex-col gap-2">
                     <div className="flex gap-2">
                         <button
                             onClick={() => onServerChange('vidsrc')}
@@ -264,40 +261,7 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                 </div>
             </div>
 
-            <div className="px-4 pt-8">
-                <h3 className="text-lg font-bold text-white mb-4">TV Shows & Movies You Liked</h3>
 
-                {myList.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-10 opacity-50 border-2 border-dashed border-[#333] rounded-lg">
-                        <p className="text-gray-400 text-sm mb-2">You haven't liked any content yet.</p>
-                        <p className="text-xs text-gray-600 text-center px-8">Tap the 'My List' button on any movie or show to add it to your personal collection.</p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-3 gap-3">
-                        {myList.map(item => (
-                            <div
-                                key={item.id}
-                                onClick={() => onItemClick(item)}
-                                className="relative aspect-[2/3] bg-[#222] rounded overflow-hidden cursor-pointer active:scale-95 transition-transform group"
-                            >
-                                <img
-                                    src={item.posterUrl || `https://via.placeholder.com/200x300`}
-                                    className="w-full h-full object-cover"
-                                    alt={item.title}
-                                />
-                                <div className="absolute top-1 left-1 bg-red-600 text-[8px] font-bold px-1 rounded-sm text-white">N</div>
-
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); onRemoveFromMyList(item); }}
-                                    className="absolute top-1 right-1 z-10 bg-black/60 hover:bg-red-600 text-white p-1 rounded-full transition-colors backdrop-blur-sm opacity-0 group-hover:opacity-100"
-                                >
-                                    <X className="w-3 h-3" />
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
         </div>
     );
 };

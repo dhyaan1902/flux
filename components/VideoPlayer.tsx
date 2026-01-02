@@ -120,7 +120,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       >
         {/* Swipe Zone - pointer-events-auto to capture swipes only in this middle area */}
         <div
-          className="flex flex-col items-center pointer-events-auto px-8 py-2 cursor-grab active:cursor-grabbing"
+          className="flex flex-col items-center pointer-events-auto px-12 py-4 cursor-grab active:cursor-grabbing touch-none"
+          style={{ touchAction: 'none' }}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}

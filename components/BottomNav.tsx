@@ -32,7 +32,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, us
             <button
               key={item.id}
               onClick={() => onTabChange(item.id as NavTab)}
-              className="relative flex flex-col items-center justify-center w-full h-full transition-all active:scale-90"
+              className="relative flex flex-col items-center justify-center w-full h-full transition-all active:scale-95"
             >
               {/* Material You Active Indicator */}
               <div className={`absolute top-0 w-12 h-8 rounded-full transition-all duration-300 ${isActive ? 'bg-red-600/20 scale-100 opacity-100' : 'scale-75 opacity-0'}`} />
@@ -51,7 +51,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, us
         {/* My Netflix Tab */}
         <button
           onClick={() => onTabChange('my-netflix')}
-          className="relative flex flex-col items-center justify-center w-full h-full transition-all active:scale-90"
+          className="relative flex flex-col items-center justify-center w-full h-full transition-all active:scale-95"
         >
           <div className={`absolute top-0 w-12 h-8 rounded-full transition-all duration-300 ${activeTab === 'my-netflix' ? 'bg-red-600/20 scale-100 opacity-100' : 'scale-75 opacity-0'}`} />
 

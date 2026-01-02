@@ -33,12 +33,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
     const [recommendations, setRecommendations] = useState<MediaItem[]>([]);
     const [loadingRecommendations, setLoadingRecommendations] = useState(false);
 
-    useEffect(() => {
-        window.history.pushState({ modal: 'mediaDetail' }, '');
-        const handlePopState = () => onClose();
-        window.addEventListener('popstate', handlePopState);
-        return () => window.removeEventListener('popstate', handlePopState);
-    }, []);
+
 
     useEffect(() => {
         let active = true;
@@ -93,7 +88,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex flex-col bg-black animate-in slide-in-from-bottom duration-500">
+        <div className="fixed inset-0 z-50 flex flex-col bg-black animate-in slide-in-from-bottom duration-300 ease-out">
             {/* Native Android AppBar Style */}
             <div className="absolute top-0 left-0 right-0 z-40 p-4 pt-safe flex items-center justify-between text-white gradient-overlay-top">
                 <button
@@ -103,9 +98,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                     <ArrowLeft className="w-6 h-6" />
                 </button>
                 <div className="flex gap-2">
-                    <button className="p-2 rounded-full bg-black/20 backdrop-blur-md active:scale-90 transition-transform">
-                        <Share2 className="w-6 h-6" />
-                    </button>
+                    {/* Placeholder for future actions if needed */}
                 </div>
             </div>
 
@@ -141,7 +134,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                             onClick={handlePlayMain}
                             className="flex-1 flex items-center justify-center gap-2 bg-white text-black font-bold py-3.5 rounded-xl active:scale-95 transition-transform shadow-lg shadow-white/5"
                         >
-                            <PlayIcon className="w-5 h-5 fill-current" />
+                            <PlayIcon className={`w-5 h-5 ${PlayIcon === Play ? 'fill-black' : ''}`} />
                             <span className="text-sm">{playButtonText}</span>
                         </button>
                     </div>
@@ -150,7 +143,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                         {details.overview}
                     </p>
 
-                    <div className="grid grid-cols-4 gap-4 mb-8">
+                    <div className="flex items-center gap-4 mb-8">
                         <button
                             className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
                             onClick={onToggleMyList}
@@ -168,25 +161,11 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                             season={details.type === MediaType.TV_SHOW ? currentSeason : undefined}
                             episode={details.type === MediaType.TV_SHOW ? 1 : undefined}
                         />
-
-                        <button className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform">
-                            <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/5 active:bg-white/10 transition-colors">
-                                <ThumbsUp className="w-5 h-5 text-white" />
-                            </div>
-                            <span className="text-[10px] text-gray-500 font-medium tracking-tight">Rate</span>
-                        </button>
-
-                        <button className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform">
-                            <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/5 active:bg-white/10 transition-colors">
-                                <Share2 className="w-5 h-5 text-white" />
-                            </div>
-                            <span className="text-[10px] text-gray-500 font-medium tracking-tight">Share</span>
-                        </button>
                     </div>
 
                     {/* Tabs / Content Section */}
                     <div className="border-t border-white/5 mt-4">
-                        <div className="flex gap-8 px-2 sticky top-[calc(env(safe-area-inset-top)+64px)] bg-[#121212] z-30">
+                        <div className="flex gap-8 px-2 bg-[#121212]">
                             {details.type === MediaType.TV_SHOW && (
                                 <button
                                     onClick={() => setActiveTab('EPISODES')}
@@ -231,34 +210,44 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                                                     <div
                                                         key={ep.id}
                                                         onClick={() => handleEpisodeClick(ep)}
-                                                        className={`flex gap-4 p-2 rounded-xl transition-all active:bg-white/5 ${isWatched ? 'opacity-40' : ''}`}
+                                                        className="flex gap-4 p-3 rounded-xl transition-all active:bg-white/5 hover:bg-white/5"
                                                     >
-                                                        <div className="relative w-32 aspect-video bg-[#1e1e1e] flex-shrink-0 rounded-lg overflow-hidden border border-white/5">
+                                                        <div className="relative w-40 aspect-video bg-[#1e1e1e] flex-shrink-0 rounded-md overflow-hidden border border-white/5 shadow-sm">
                                                             <img
                                                                 src={ep.imageUrl || headerImage}
-                                                                className="w-full h-full object-cover"
+                                                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                                                 loading="lazy"
                                                             />
                                                             <div className="absolute inset-0 flex items-center justify-center bg-black/10">
-                                                                <Play className="w-6 h-6 fill-white text-white opacity-90" />
+                                                                <Play className="w-8 h-8 fill-white text-white opacity-90 drop-shadow-md" />
                                                             </div>
+                                                            {isWatched && (
+                                                                <div className="absolute top-1.5 right-1.5 bg-black/60 rounded-full p-1 border border-white/10">
+                                                                    <Check className="w-3 h-3 text-white" />
+                                                                </div>
+                                                            )}
+                                                            {/* Progress Bar (Optional - based on watch history if available) */}
+                                                            {/* <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-800"><div className="h-full bg-red-600 w-1/2"/></div> */}
                                                         </div>
-                                                        <div className="flex-1 min-w-0 flex flex-col justify-center">
-                                                            <div className="flex items-center justify-between mb-0.5">
-                                                                <h4 className="text-white font-bold text-[13px] truncate">{ep.episodeNumber}. {ep.title}</h4>
-                                                                <span className="text-gray-500 text-[10px]">{ep.runtime ? `${ep.runtime}m` : ''}</span>
+                                                        <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
+                                                            <div className="flex items-start justify-between gap-2">
+                                                                <h4 className="text-white font-bold text-[13px] leading-tight line-clamp-2">{ep.episodeNumber}. {ep.title}</h4>
+                                                                <div onClick={(e) => e.stopPropagation()}>
+                                                                    <DownloadButton
+                                                                        tmdbId={details.tmdbId}
+                                                                        type={MediaType.TV_SHOW}
+                                                                        title={`${details.title} S${currentSeason}E${ep.episodeNumber}`}
+                                                                        season={currentSeason}
+                                                                        episode={ep.episodeNumber}
+                                                                        variant="compact"
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                            <p className="text-gray-500 text-[11px] line-clamp-2 leading-tight">{ep.overview || "No description available."}</p>
-
-                                                            <div onClick={(e) => e.stopPropagation()} className="mt-1.5">
-                                                                <DownloadButton
-                                                                    tmdbId={details.tmdbId}
-                                                                    type={MediaType.TV_SHOW}
-                                                                    title={`${details.title} S${currentSeason}E${ep.episodeNumber}`}
-                                                                    season={currentSeason}
-                                                                    episode={ep.episodeNumber}
-                                                                />
+                                                            <div className="flex items-center gap-2 text-gray-500 text-[11px]">
+                                                                {ep.runtime ? <span>{ep.runtime}m</span> : null}
+                                                                {ep.airDate && <span>• {new Date(ep.airDate).getFullYear()}</span>}
                                                             </div>
+                                                            <p className="text-gray-400 text-[11px] line-clamp-2 leading-relaxed opacity-80">{ep.overview || "No description available."}</p>
                                                         </div>
                                                     </div>
                                                 );

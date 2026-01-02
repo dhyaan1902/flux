@@ -12,7 +12,7 @@ interface DownloadButtonProps {
     title: string;
     season?: number;
     episode?: number;
-    variant?: 'icon-label' | 'large-button';
+    variant?: 'icon-label' | 'large-button' | 'compact';
 }
 
 export const DownloadButton: React.FC<DownloadButtonProps> = ({
@@ -93,7 +93,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
                     </div>
                     <span className="text-[10px] text-gray-500 font-medium">Download</span>
                 </button>
-            ) : (
+            ) : variant === 'large-button' ? (
                 <button
                     onClick={handleButtonClick}
                     className="w-12 h-12 flex items-center justify-center bg-white/5 rounded-xl border border-white/5 active:scale-95 transition-transform"
@@ -102,6 +102,19 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
                         <Loader2 className="w-5 h-5 text-white animate-spin" />
                     ) : (
                         <Download className="w-5 h-5 text-white" />
+                    )}
+                </button>
+            ) : (
+                // Compact Variant
+                <button
+                    onClick={handleButtonClick}
+                    className="p-2 rounded-full bg-white/5 hover:bg-white/10 active:scale-90 transition-all border border-white/5"
+                    title="Download"
+                >
+                    {loading ? (
+                        <Loader2 className="w-3.5 h-3.5 text-gray-300 animate-spin" />
+                    ) : (
+                        <Download className="w-3.5 h-3.5 text-gray-300" />
                     )}
                 </button>
             )}

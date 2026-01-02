@@ -329,8 +329,6 @@ const App: React.FC = () => {
                 season,
                 episode
             });
-
-            setSelectedItem(null);
         }
     };
 
@@ -375,7 +373,7 @@ const App: React.FC = () => {
                                         onToggleMyList={() => toggleMyList(heroItem)}
                                     />
                                 )}
-                                <div className="mt-4 md:-mt-32 relative z-10 space-y-2 min-h-screen">
+                                <div className="mt-4 md:-mt-20 relative z-10 space-y-2 min-h-screen">
                                     {homeRows.map((row, i) => (
                                         <Row
                                             key={`${row.title}-${i}`}

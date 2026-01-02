@@ -19,7 +19,7 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
   const backgroundUrl = rawUrl.replace('w342', 'original').replace('w1280', 'original');
 
   return (
-    <div className="relative w-full aspect-[2/3] max-h-[85vh] overflow-hidden bg-black">
+    <div className="relative w-full md:aspect-video aspect-[2/3] max-h-[85vh] overflow-hidden bg-black">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
@@ -33,7 +33,7 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
       </div>
 
       {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 pb-12 flex flex-col items-center text-center z-20 w-full px-6">
+      <div className="absolute bottom-0 left-0 right-0 pb-12 md:pb-24 flex flex-col items-center text-center z-20 w-full px-6">
         <h1 className="text-5xl md:text-8xl font-black text-white mb-4 drop-shadow-2xl tracking-tighter text-center max-w-5xl leading-[0.85] animate-in fade-in slide-in-from-bottom-12 duration-1000">
           {item.title}
         </h1>
@@ -48,10 +48,10 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
 
         <div className="flex items-center gap-6 w-full max-w-sm justify-center animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500">
           <button
-            className="flex flex-col items-center gap-1.5 active:scale-90 transition-transform"
+            className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
             onClick={onToggleMyList}
           >
-            <div className="w-12 h-12 rounded-full glass flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full glass flex items-center justify-center border border-white/10">
               {isInMyList ? <Check className="w-6 h-6 text-white" /> : <Plus className="w-6 h-6 text-white" />}
             </div>
             <span className="text-[10px] text-white/60 font-bold tracking-widest">MY LIST</span>
@@ -66,10 +66,10 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
           </button>
 
           <button
-            className="flex flex-col items-center gap-1.5 active:scale-90 transition-transform"
+            className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
             onClick={onInfo}
           >
-            <div className="w-12 h-12 rounded-full glass flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full glass flex items-center justify-center border border-white/10">
               <Info className="w-6 h-6 text-white" />
             </div>
             <span className="text-[10px] text-white/60 font-bold tracking-widest">INFO</span>
