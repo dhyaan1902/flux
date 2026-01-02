@@ -50,21 +50,21 @@ export const SearchTab: React.FC<SearchTabProps> = ({ onItemClick }) => {
     return (
         <div className="min-h-screen bg-black pt-safe pb-24">
             {/* Sticky Header */}
-            <div className="sticky top-0 z-30 glass backdrop-blur-3xl pb-4 border-b border-white/5">
+            <div className="sticky top-0 z-30 bg-black pb-4 border-b border-white/10">
                 <div className="p-4">
-                    <div className="flex items-center bg-white/5 rounded-xl h-14 px-5 transition-all focus-within:bg-white/10 ring-1 ring-white/10 focus-within:ring-red-600/50">
-                        <Search className="w-5 h-5 text-gray-500 mr-4" />
+                    <div className="flex items-center bg-[#1a1a1a] rounded-xl h-12 px-5 transition-all focus-within:ring-1 focus-within:ring-red-600">
+                        <Search className="w-4 h-4 text-gray-400 mr-4" />
                         <input
                             autoFocus
                             type="text"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             placeholder="Movies, shows, more..."
-                            className="flex-1 bg-transparent border-none focus:ring-0 text-white text-base placeholder-gray-600 font-medium"
+                            className="flex-1 bg-transparent border-none focus:ring-0 text-white text-[14px] placeholder-gray-600 font-medium"
                         />
                         {query && (
-                            <button onClick={() => setQuery('')} className="p-2 rounded-full hover:bg-white/10 active:scale-90 transition-transform">
-                                <X className="w-5 h-5 text-gray-400" />
+                            <button onClick={() => setQuery('')} className="p-1.5 rounded-full hover:bg-white/5 active:scale-90 transition-transform">
+                                <X className="w-5 h-5 text-gray-500" />
                             </button>
                         )}
                     </div>
@@ -72,24 +72,24 @@ export const SearchTab: React.FC<SearchTabProps> = ({ onItemClick }) => {
 
                 {/* Filter Chips - MD3 Style */}
                 {query.length > 0 && (
-                    <div className="flex items-center gap-3 px-5 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="flex items-center gap-2.5 px-5 animate-in fade-in slide-in-from-top-1 duration-300">
                         <button
                             onClick={() => setFilter('ALL')}
-                            className={`px-6 py-2 rounded-md text-xs font-bold transition-all ${filter === 'ALL' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'bg-white/5 text-gray-400 border border-white/5'}`}
+                            className={`px-5 py-1.5 rounded-lg text-[11px] font-bold transition-all ${filter === 'ALL' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-gray-400 border border-white/5'}`}
                         >
                             All
                         </button>
                         <button
                             onClick={() => setFilter('MOVIE')}
-                            className={`px-5 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${filter === 'MOVIE' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'bg-white/5 text-gray-400 border border-white/5'}`}
+                            className={`px-5 py-1.5 rounded-lg text-[11px] font-bold transition-all flex items-center gap-2 ${filter === 'MOVIE' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-gray-400 border border-white/5'}`}
                         >
-                            <Film className="w-3.5 h-3.5" /> Movies
+                            <Film className="w-3 h-3" /> Movies
                         </button>
                         <button
                             onClick={() => setFilter('TV')}
-                            className={`px-5 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${filter === 'TV' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'bg-white/5 text-gray-400 border border-white/5'}`}
+                            className={`px-5 py-1.5 rounded-lg text-[11px] font-bold transition-all flex items-center gap-2 ${filter === 'TV' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-gray-400 border border-white/5'}`}
                         >
-                            <Tv className="w-3.5 h-3.5" /> TV
+                            <Tv className="w-3 h-3" /> TV
                         </button>
                     </div>
                 )}
@@ -102,7 +102,7 @@ export const SearchTab: React.FC<SearchTabProps> = ({ onItemClick }) => {
                     </div>
                 ) : query.length > 0 ? (
                     <div className="space-y-6">
-                        <div className="grid grid-cols-3 gap-3">
+                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3">
                             {filteredResults.map(item => (
                                 <div key={item.id} className="animate-in fade-in duration-500">
                                     <MediaCard item={item} onClick={onItemClick} />

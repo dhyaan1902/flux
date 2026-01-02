@@ -93,7 +93,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
             <div className="absolute top-0 left-0 right-0 z-40 p-4 pt-safe flex items-center justify-between text-white gradient-overlay-top">
                 <button
                     onClick={() => window.history.back()}
-                    className="p-2 rounded-full bg-black/20 backdrop-blur-md active:scale-90 transition-transform"
+                    className="p-2 rounded-full bg-black/60 active:scale-90 transition-transform shadow-lg border border-white/10"
                 >
                     <ArrowLeft className="w-6 h-6" />
                 </button>
@@ -102,27 +102,27 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                 </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto scrollbar-hide pb-safe bg-[#121212]">
+            <div className="flex-1 overflow-y-auto scrollbar-hide pb-safe bg-black">
                 <div className="w-full aspect-video bg-black relative">
                     <img
                         src={headerImage}
                         alt={details.title}
                         className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                        <button onClick={handlePlayMain} className="w-16 h-16 rounded-full border border-white/20 bg-white/10 flex items-center justify-center backdrop-blur-lg active:scale-90 transition-transform">
-                            <Play className="w-7 h-7 fill-white text-white ml-1" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                        <button onClick={handlePlayMain} className="w-14 h-14 rounded-full border border-white/20 bg-black/60 flex items-center justify-center active:scale-90 transition-transform shadow-2xl">
+                            <Play className="w-6 h-6 fill-white text-white ml-1" />
                         </button>
                     </div>
-                    <div className="absolute bottom-0 left-0 right-0 h-24 gradient-overlay-bottom" />
+                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black via-black/80 to-transparent" />
                 </div>
 
-                <div className="px-5 -mt-6 relative z-10 pb-20">
-                    <h2 className="text-3xl font-bold text-white mb-2 leading-tight drop-shadow-lg">{details.title}</h2>
+                <div className="px-6 -mt-8 relative z-10 pb-20">
+                    <h2 className="text-3xl font-black text-white mb-2 leading-tight drop-shadow-2xl">{details.title}</h2>
 
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-gray-400 text-xs mb-6">
-                        <span className="text-green-500 font-bold">98% Match</span>
-                        <span className="bg-gray-800 px-2 py-0.5 rounded text-[10px] text-gray-200 border border-white/5">HDR</span>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-gray-500 text-[11px] mb-6 font-bold uppercase tracking-wider">
+                        <span className="text-green-500">98% Match</span>
+                        <span className="border border-white/20 px-1.5 py-0.5 rounded-sm text-white">HDR</span>
                         <span>{details.year}</span>
                         {details.type === MediaType.TV_SHOW && (
                             <span>{seasonCount} Season{seasonCount > 1 ? 's' : ''}</span>
@@ -132,14 +132,14 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                     <div className="flex gap-3 mb-8">
                         <button
                             onClick={handlePlayMain}
-                            className="flex-1 flex items-center justify-center gap-2 bg-white text-black font-bold py-3.5 rounded-xl active:scale-95 transition-transform shadow-lg shadow-white/5"
+                            className="flex-1 flex items-center justify-center gap-2 bg-white text-black font-black py-4 rounded-xl active:scale-95 transition-transform"
                         >
                             <PlayIcon className={`w-5 h-5 ${PlayIcon === Play ? 'fill-black' : ''}`} />
-                            <span className="text-sm">{playButtonText}</span>
+                            <span className="text-[15px] uppercase tracking-tight">{playButtonText}</span>
                         </button>
                     </div>
 
-                    <p className="text-gray-300 text-sm leading-relaxed mb-6 opacity-90 line-clamp-4">
+                    <p className="text-gray-400 text-[13px] leading-relaxed mb-8 opacity-90 line-clamp-4 font-medium">
                         {details.overview}
                     </p>
 
@@ -164,19 +164,19 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                     </div>
 
                     {/* Tabs / Content Section */}
-                    <div className="border-t border-white/5 mt-4">
-                        <div className="flex gap-8 px-2 bg-[#121212]">
+                    <div className="border-t border-white/10 mt-4">
+                        <div className="flex gap-10 px-2 bg-black">
                             {details.type === MediaType.TV_SHOW && (
                                 <button
                                     onClick={() => setActiveTab('EPISODES')}
-                                    className={`py-4 text-xs font-bold tracking-widest transition-all ${activeTab === 'EPISODES' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-500'}`}
+                                    className={`py-4 text-[11px] font-black tracking-widest transition-all ${activeTab === 'EPISODES' ? 'text-white border-t-2 border-red-600' : 'text-gray-600'}`}
                                 >
                                     EPISODES
                                 </button>
                             )}
                             <button
                                 onClick={() => setActiveTab('MORE')}
-                                className={`py-4 text-xs font-bold tracking-widest transition-all ${activeTab === 'MORE' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-500'}`}
+                                className={`py-4 text-[11px] font-black tracking-widest transition-all ${activeTab === 'MORE' ? 'text-white border-t-2 border-red-600' : 'text-gray-600'}`}
                             >
                                 MORE LIKE THIS
                             </button>
@@ -210,44 +210,32 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                                                     <div
                                                         key={ep.id}
                                                         onClick={() => handleEpisodeClick(ep)}
-                                                        className="flex gap-4 p-3 rounded-xl transition-all active:bg-white/5 hover:bg-white/5"
+                                                        className="flex gap-4 p-2 rounded-xl transition-all active:bg-white/5"
                                                     >
-                                                        <div className="relative w-40 aspect-video bg-[#1e1e1e] flex-shrink-0 rounded-md overflow-hidden border border-white/5 shadow-sm">
+                                                        <div className="relative w-36 aspect-video bg-[#0a0a0a] flex-shrink-0 rounded-lg overflow-hidden border border-white/10">
                                                             <img
                                                                 src={ep.imageUrl || headerImage}
                                                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                                                 loading="lazy"
                                                             />
-                                                            <div className="absolute inset-0 flex items-center justify-center bg-black/10">
-                                                                <Play className="w-8 h-8 fill-white text-white opacity-90 drop-shadow-md" />
+                                                            <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                                                <Play className="w-6 h-6 fill-white text-white opacity-90 drop-shadow-md" />
                                                             </div>
                                                             {isWatched && (
-                                                                <div className="absolute top-1.5 right-1.5 bg-black/60 rounded-full p-1 border border-white/10">
-                                                                    <Check className="w-3 h-3 text-white" />
+                                                                <div className="absolute top-1 right-1 bg-red-600 rounded-full p-0.5 border border-white/20">
+                                                                    <Check className="w-2.5 h-2.5 text-white" />
                                                                 </div>
                                                             )}
-                                                            {/* Progress Bar (Optional - based on watch history if available) */}
-                                                            {/* <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-800"><div className="h-full bg-red-600 w-1/2"/></div> */}
                                                         </div>
                                                         <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
                                                             <div className="flex items-start justify-between gap-2">
                                                                 <h4 className="text-white font-bold text-[13px] leading-tight line-clamp-2">{ep.episodeNumber}. {ep.title}</h4>
-                                                                <div onClick={(e) => e.stopPropagation()}>
-                                                                    <DownloadButton
-                                                                        tmdbId={details.tmdbId}
-                                                                        type={MediaType.TV_SHOW}
-                                                                        title={`${details.title} S${currentSeason}E${ep.episodeNumber}`}
-                                                                        season={currentSeason}
-                                                                        episode={ep.episodeNumber}
-                                                                        variant="compact"
-                                                                    />
-                                                                </div>
                                                             </div>
-                                                            <div className="flex items-center gap-2 text-gray-500 text-[11px]">
+                                                            <div className="flex items-center gap-2 text-gray-500 text-[10px] font-bold uppercase tracking-tighter">
                                                                 {ep.runtime ? <span>{ep.runtime}m</span> : null}
                                                                 {ep.airDate && <span>• {new Date(ep.airDate).getFullYear()}</span>}
                                                             </div>
-                                                            <p className="text-gray-400 text-[11px] line-clamp-2 leading-relaxed opacity-80">{ep.overview || "No description available."}</p>
+                                                            <p className="text-gray-500 text-[11px] line-clamp-2 leading-relaxed font-medium">{ep.overview || "No description available."}</p>
                                                         </div>
                                                     </div>
                                                 );

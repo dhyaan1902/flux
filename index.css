@@ -4,19 +4,22 @@
 
 
 :root {
-  --primary: #E50914;
-  --bg-dark: #000000;
-  --bg-surface: #121212;
-  --bg-elevated: #1e1e1e;
-  --text-primary: #ffffff;
-  --text-secondary: #b3b3b3;
+  --primary: #FF0000;
+  /* More vibrant red */
+  --bg-black: #000000;
+  --bg-surface: #0a0a0a;
+  --bg-elevated: #141414;
+  --text-primary: #FFFFFF;
+  --text-secondary: #888888;
+  /* Dimmer secondary for contrast */
+  --accent: #E50914;
   --radius-sm: 4px;
   --radius-md: 12px;
-  --radius-lg: 24px;
+  --radius-lg: 20px;
 }
 
 body {
-  background-color: var(--bg-dark);
+  background-color: var(--bg-black);
   color: var(--text-primary);
   font-family: 'Outfit', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -45,13 +48,11 @@ body {
   transition: opacity 0.3s ease;
 }
 
-/* Glassmorphism */
+/* Solid Surface (Replacement for Glassmorphism) */
 .glass {
-  background: rgba(18, 18, 18, 0.85);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  background: var(--bg-surface);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* Ripple Simulation */
@@ -107,6 +108,19 @@ body {
 
 .pt-safe {
   padding-top: env(safe-area-inset-top);
+}
+
+.pl-safe {
+  padding-left: env(safe-area-inset-left);
+}
+
+.pr-safe {
+  padding-right: env(safe-area-inset-right);
+}
+
+.px-safe {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 /* Premium Gradients */

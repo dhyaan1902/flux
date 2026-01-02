@@ -16,7 +16,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
 
   return (
     <div
-      className="relative w-full aspect-[2/3] rounded-md overflow-hidden cursor-pointer active:scale-[0.96] transition-all duration-200 shadow-xl shadow-black/50 border border-white/5"
+      className="relative w-full aspect-[2/3] rounded-lg overflow-hidden cursor-pointer active:scale-95 transition-all duration-200 border border-white/10 bg-[#0a0a0a]"
       onClick={() => onClick(item)}
     >
       {/* Skeleton Loading State */}

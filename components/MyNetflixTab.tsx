@@ -89,15 +89,15 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
 
     return (
         <div className="min-h-screen bg-black pb-24">
-            <div className="pt-safe px-4 pb-4 sticky top-0 bg-black/95 z-20 flex justify-between items-center">
-                <h1 className="text-2xl font-bold text-white">My Netflix</h1>
+            <div className="pt-safe px-6 pb-4 sticky top-0 bg-black z-20 flex justify-between items-center">
+                <h1 className="text-2xl font-black text-white">Profile</h1>
             </div>
 
-            <div className="flex flex-col items-center py-6 border-b border-gray-800/50">
-                <div className="w-20 h-20 rounded bg-blue-600 flex items-center justify-center text-2xl font-bold text-white mb-2 shadow-xl border-2 border-white/10 relative group">
-                    {userName.substring(0, 2).toUpperCase()}
-                    <div className="absolute bottom-0 right-0 w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                        <Settings className="w-3 h-3 text-black" />
+            <div className="flex flex-col items-center py-8">
+                <div className="w-24 h-24 rounded-2xl bg-blue-600 flex items-center justify-center text-3xl font-black text-white mb-3 shadow-2xl border-4 border-white/10 relative">
+                    {userName.substring(0, 1).toUpperCase()}
+                    <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
+                        <Edit3 className="w-4 h-4 text-black" />
                     </div>
                 </div>
 
@@ -107,56 +107,54 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                             type="text"
                             value={tempName}
                             onChange={(e) => setTempName(e.target.value)}
-                            className="bg-[#333] text-white px-2 py-1 rounded text-sm outline-none border border-gray-600"
+                            className="bg-[#1a1a1a] text-white px-3 py-2 rounded-lg text-sm outline-none border border-white/10 focus:border-red-600"
                             autoFocus
                         />
-                        <button onClick={saveName} className="bg-green-600 text-white px-3 py-1 rounded text-xs font-bold">Save</button>
+                        <button onClick={saveName} className="bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-black uppercase tracking-tight">Save</button>
                     </div>
                 ) : (
-                    <h2 className="text-lg font-bold text-white flex items-center gap-2 mt-1" onClick={() => setIsEditingName(true)}>
+                    <h2 className="text-xl font-black text-white flex items-center gap-2 mt-1" onClick={() => setIsEditingName(true)}>
                         {userName}
-                        <Edit3 className="w-4 h-4 text-gray-500 cursor-pointer" />
                     </h2>
                 )}
             </div>
 
             {continueWatching.length > 0 && (
-                <div className="py-6 border-b border-gray-800/50">
-                    <h3 className="text-white font-bold mb-3 px-4 flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-white" />
+                <div className="py-6">
+                    <h3 className="text-white font-black text-[13px] uppercase tracking-widest mb-4 px-6 opacity-60">
                         Continue Watching
                     </h3>
-                    <div className="flex overflow-x-auto gap-3 px-4 pb-4 scrollbar-hide snap-x snap-mandatory">
+                    <div className="flex overflow-x-auto gap-3 px-6 pb-4 scrollbar-hide snap-x snap-mandatory">
                         {continueWatching.map((item) => (
                             <div
                                 key={item.id}
                                 onClick={() => handleContinue(item)}
-                                className="flex-none w-[140px] snap-start cursor-pointer group relative"
+                                className="flex-none w-[160px] snap-start cursor-pointer group relative"
                             >
-                                <div className="aspect-[16/9] bg-[#222] rounded overflow-hidden mb-2 relative border border-white/10">
+                                <div className="aspect-[16/9] bg-[#0a0a0a] rounded-xl overflow-hidden mb-2 relative border border-white/10">
                                     <img
                                         src={item.posterUrl || `https://via.placeholder.com/200x300`}
-                                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                                        className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
                                         alt={item.title}
                                     />
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <PlayCircle className="w-8 h-8 text-white/80 group-hover:scale-110 transition-transform" />
+                                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                        <PlayCircle className="w-10 h-10 text-white/90 drop-shadow-lg" />
                                     </div>
-                                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-600">
-                                        <div className="h-full bg-red-600 w-1/2"></div>
+                                    <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-white/10">
+                                        <div className="h-full bg-red-600 w-1/2 rounded-r-full"></div>
                                     </div>
                                 </div>
 
                                 <button
                                     onClick={(e) => { e.stopPropagation(); onRemoveFromHistory(item.id); }}
-                                    className="absolute top-1 right-1 z-10 bg-black/60 hover:bg-red-600 text-white p-1 rounded-full transition-colors backdrop-blur-sm"
+                                    className="absolute top-1 right-1 z-10 bg-black/80 text-white p-1.5 rounded-full border border-white/10 active:scale-90 transition-all"
                                 >
-                                    <X className="w-3 h-3" />
+                                    <X className="w-3.5 h-3.5" />
                                 </button>
 
-                                <h4 className="text-xs font-bold text-gray-200 line-clamp-1">{item.title}</h4>
-                                <p className="text-[10px] text-gray-500">
-                                    {item.type === 'MOVIE' ? 'Movie' : `S${item.lastSeason} : E${item.lastEpisode}`}
+                                <h4 className="text-[12px] font-black text-white/90 line-clamp-1 px-1">{item.title}</h4>
+                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter px-1">
+                                    {item.type === 'MOVIE' ? 'Movie' : `S${item.lastSeason} • E${item.lastEpisode}`}
                                 </p>
                             </div>
                         ))}
@@ -164,39 +162,39 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                 </div>
             )}
 
-            <div className="px-4 py-6 border-b border-gray-800/50">
-                <h3 className="text-white font-bold mb-3 flex items-center gap-2">
+            <div className="px-6 py-6">
+                <h3 className="text-white font-black text-[13px] uppercase tracking-widest mb-4 opacity-60 flex items-center gap-2">
                     <Key className="w-4 h-4 text-yellow-500" />
-                    API Configuration
+                    TMDB Configuration
                 </h3>
                 <div className="space-y-3">
-                    <div className="bg-[#1a1a1a] p-3 rounded-md border border-white/5">
-                        <label className="text-xs text-gray-400 block mb-1">TMDB API Key (Private)</label>
+                    <div className="bg-[#0a0a0a] p-4 rounded-xl border border-white/10">
+                        <label className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block mb-2">API Key (Private)</label>
 
                         <div className="flex gap-2">
                             <input
                                 type="text"
                                 value={apiKey}
                                 onChange={(e) => setApiKey(e.target.value)}
-                                placeholder={isApiKeyLocked ? "••••••••••••••••" : "Enter your TMDB Key..."}
+                                placeholder={isApiKeyLocked ? "••••••••••••••••" : "Paste your key here..."}
                                 disabled={isApiKeyLocked}
-                                className={`flex-1 text-sm px-3 py-2 rounded border outline-none transition-colors ${isApiKeyLocked
-                                    ? 'bg-[#262626] text-gray-500 border-transparent cursor-not-allowed'
-                                    : 'bg-black/50 text-white border-gray-700 focus:border-red-600'
+                                className={`flex-1 text-[13px] px-4 py-3 rounded-lg border outline-none transition-all ${isApiKeyLocked
+                                    ? 'bg-black text-gray-600 border-white/5'
+                                    : 'bg-[#1a1a1a] text-white border-white/10 focus:border-red-600'
                                     }`}
                             />
 
                             {showKeyConfirm ? (
-                                <div className="flex gap-2 animate-in fade-in slide-in-from-right-4">
+                                <div className="flex gap-2 animate-in fade-in slide-in-from-right-2">
                                     <button
                                         onClick={confirmEdit}
-                                        className="bg-red-600 text-white px-3 py-2 rounded text-xs font-bold whitespace-nowrap"
+                                        className="bg-red-600 text-white px-4 py-3 rounded-lg text-xs font-black uppercase tracking-tight"
                                     >
-                                        Sure?
+                                        Edit?
                                     </button>
                                     <button
                                         onClick={cancelEdit}
-                                        className="bg-[#333] text-white px-3 py-2 rounded text-xs font-bold"
+                                        className="bg-[#1a1a1a] text-white px-4 py-3 rounded-lg text-xs font-black uppercase tracking-tight border border-white/10"
                                     >
                                         No
                                     </button>
@@ -204,60 +202,49 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                             ) : isApiKeyLocked ? (
                                 <button
                                     onClick={handleEditKey}
-                                    className="bg-[#333] hover:bg-[#444] text-white px-4 py-2 rounded text-xs font-bold transition-colors"
+                                    className="bg-[#1a1a1a] hover:bg-[#222] text-white px-5 py-3 rounded-lg text-xs font-black uppercase tracking-tight border border-white/10 transition-colors"
                                 >
-                                    Edit
+                                    Unlock
                                 </button>
                             ) : (
                                 <button
                                     onClick={saveKey}
-                                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-xs font-bold transition-colors"
+                                    className="bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-lg text-xs font-black uppercase tracking-tight transition-colors shadow-lg shadow-red-600/20"
                                 >
-                                    Add
+                                    Save
                                 </button>
                             )}
                         </div>
-
-                        <p className="text-[10px] text-gray-500 mt-2 flex items-center gap-1">
-                            {isApiKeyLocked ? (
-                                <><span className="w-1.5 h-1.5 rounded-full bg-green-500" /> Key is saved and secure.</>
-                            ) : (
-                                "Your key is stored locally on your device only."
-                            )}
-                        </p>
                     </div>
                 </div>
             </div>
 
-            <div className="px-4 py-6 border-b border-gray-800/50">
-                <h3 className="text-white font-bold mb-3 flex items-center gap-2">
+            <div className="px-6 py-4">
+                <h3 className="text-white font-black text-[13px] uppercase tracking-widest mb-4 opacity-60 flex items-center gap-2">
                     <Wifi className="w-4 h-4 text-red-500" />
                     Playback Server
                 </h3>
-                <div className="bg-[#1a1a1a] rounded-md p-2 flex flex-col gap-2">
+                <div className="bg-[#0a0a0a] rounded-xl p-2 border border-white/10">
                     <div className="flex gap-2">
                         <button
                             onClick={() => onServerChange('vidsrc')}
-                            className={`flex-1 py-3 text-sm font-bold rounded transition-all ${currentServer === 'vidsrc'
-                                ? 'bg-red-600 text-white shadow-md'
-                                : 'bg-[#262626] text-gray-400 hover:text-white'
+                            className={`flex-1 py-3 text-xs font-black uppercase tracking-wider rounded-lg transition-all ${currentServer === 'vidsrc'
+                                ? 'bg-white text-black shadow-lg'
+                                : 'bg-[#1a1a1a] text-gray-500'
                                 }`}
                         >
-                            Server 1
+                            Primary
                         </button>
                         <button
                             onClick={() => onServerChange('vidrock')}
-                            className={`flex-1 py-3 text-sm font-bold rounded transition-all ${currentServer === 'vidrock'
-                                ? 'bg-red-600 text-white shadow-md'
-                                : 'bg-[#262626] text-gray-400 hover:text-white'
+                            className={`flex-1 py-3 text-xs font-black uppercase tracking-wider rounded-lg transition-all ${currentServer === 'vidrock'
+                                ? 'bg-white text-black shadow-lg'
+                                : 'bg-[#1a1a1a] text-gray-500'
                                 }`}
                         >
-                            Server 2
+                            Mirror
                         </button>
                     </div>
-                    <p className="text-[10px] text-gray-500 px-1">
-                        📺 Embed player - reliable across all devices
-                    </p>
                 </div>
             </div>
 

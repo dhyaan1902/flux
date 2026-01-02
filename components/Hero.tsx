@@ -28,19 +28,19 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
           onLoad={() => setIsLoaded(true)}
           className={`w-full h-full object-cover transition-all duration-1000 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
         />
-        <div className="absolute inset-x-0 bottom-0 h-[60%] gradient-overlay-bottom z-10" />
-        <div className="absolute inset-x-0 top-0 h-32 gradient-overlay-top z-10" />
+        <div className="absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-t from-black via-black/80 to-transparent z-10" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/90 via-black/40 to-transparent z-10" />
       </div>
 
       {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 pb-12 md:pb-24 flex flex-col items-center text-center z-20 w-full px-6">
-        <h1 className="text-5xl md:text-8xl font-black text-white mb-4 drop-shadow-2xl tracking-tighter text-center max-w-5xl leading-[0.85] animate-in fade-in slide-in-from-bottom-12 duration-1000">
+      <div className="absolute bottom-0 left-0 right-0 pb-16 md:pb-24 flex flex-col items-center text-center z-20 w-full px-8 px-safe">
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white mb-6 drop-shadow-2xl tracking-tighter text-center max-w-[90%] md:max-w-5xl leading-[0.8] animate-in fade-in slide-in-from-bottom-12 duration-1000">
           {item.title}
         </h1>
 
-        <div className="flex flex-wrap justify-center gap-2 mb-8 animate-in fade-in duration-1000 delay-300">
+        <div className="flex flex-wrap justify-center gap-1.5 mb-8 animate-in fade-in duration-1000 delay-300">
           {item.genres.slice(0, 3).map((g, i) => (
-            <span key={i} className="text-[12px] text-white/70 font-bold bg-white/10 px-3 py-1 rounded-full backdrop-blur-md border border-white/5">
+            <span key={i} className="text-[11px] text-white/80 font-bold bg-[#333]/40 px-3 py-1 rounded-md border border-white/5">
               {g}
             </span>
           ))}
@@ -51,28 +51,28 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
             className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
             onClick={onToggleMyList}
           >
-            <div className="w-12 h-12 rounded-full glass flex items-center justify-center border border-white/10">
+            <div className="w-12 h-12 rounded-full bg-[#1a1a1a] flex items-center justify-center border border-white/10 shadow-lg">
               {isInMyList ? <Check className="w-6 h-6 text-white" /> : <Plus className="w-6 h-6 text-white" />}
             </div>
-            <span className="text-[10px] text-white/60 font-bold tracking-widest">MY LIST</span>
+            <span className="text-[10px] text-white/60 font-bold tracking-tight uppercase">My List</span>
           </button>
 
           <button
             onClick={onPlay}
-            className="flex-1 flex items-center justify-center gap-3 bg-white text-black py-4 rounded-2xl font-black active:scale-[0.97] transition-all shadow-xl shadow-white/5"
+            className="flex-1 flex items-center justify-center gap-3 bg-white text-black py-4 rounded-xl font-bold active:scale-[0.97] transition-all shadow-xl shadow-white/5"
           >
-            <Play className="w-6 h-6 fill-black" />
-            <span className="text-base tracking-tight">PLAY NOW</span>
+            <Play className="w-5 h-5 fill-black" />
+            <span className="text-base tracking-tight font-black">PLAY</span>
           </button>
 
           <button
             className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
             onClick={onInfo}
           >
-            <div className="w-12 h-12 rounded-full glass flex items-center justify-center border border-white/10">
+            <div className="w-12 h-12 rounded-full bg-[#1a1a1a] flex items-center justify-center border border-white/10 shadow-lg">
               <Info className="w-6 h-6 text-white" />
             </div>
-            <span className="text-[10px] text-white/60 font-bold tracking-widest">INFO</span>
+            <span className="text-[10px] text-white/60 font-bold tracking-tight uppercase">Info</span>
           </button>
         </div>
       </div>
