@@ -33,46 +33,47 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
       </div>
 
       {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 pb-16 md:pb-24 flex flex-col items-center text-center z-20 w-full px-8 px-safe">
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white mb-6 drop-shadow-2xl tracking-tighter text-center max-w-[90%] md:max-w-5xl leading-[0.8] animate-in fade-in slide-in-from-bottom-12 duration-1000">
+      <div className="absolute bottom-0 left-0 right-0 pb-12 flex flex-col items-center text-center z-20 w-full px-6 px-safe">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight text-center max-w-[90%] md:max-w-4xl leading-tight">
           {item.title}
         </h1>
 
-        <div className="flex flex-wrap justify-center gap-1.5 mb-8 animate-in fade-in duration-1000 delay-300">
+        <div className="flex flex-wrap justify-center gap-2 mb-8 items-center">
           {item.genres.slice(0, 3).map((g, i) => (
-            <span key={i} className="text-[11px] text-white/80 font-bold bg-[#333]/40 px-3 py-1 rounded-md border border-white/5">
-              {g}
-            </span>
+            <React.Fragment key={i}>
+              <span className="text-[12px] text-gray-300 font-medium">
+                {g}
+              </span>
+              {i < Math.min(2, item.genres.length - 1) && (
+                <div className="w-1 h-1 rounded-full bg-gray-600" />
+              )}
+            </React.Fragment>
           ))}
         </div>
 
-        <div className="flex items-center gap-8 w-full max-w-sm justify-center animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500">
+        <div className="flex items-center gap-10 w-full max-w-sm justify-center group">
           <button
-            className="flex flex-col items-center gap-1 active:scale-95 transition-transform"
+            className="flex flex-col items-center gap-2 active:scale-95 transition-all text-white/30"
             onClick={onToggleMyList}
           >
-            <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center border border-white/10 shadow-lg">
-              {isInMyList ? <Check className="w-5 h-5 text-white" /> : <Plus className="w-5 h-5 text-white" />}
-            </div>
-            <span className="text-[9px] text-white/60 font-black tracking-widest uppercase">My List</span>
+            {isInMyList ? <Check className="w-6 h-6 text-white" /> : <Plus className="w-6 h-6" />}
+            <span className="text-[10px] font-medium uppercase tracking-tighter">My List</span>
           </button>
 
           <button
             onClick={onPlay}
-            className="px-8 flex items-center justify-center gap-2 bg-white text-black py-2.5 rounded-full font-bold active:scale-[0.97] transition-all shadow-xl shadow-white/5"
+            className="px-12 flex items-center justify-center gap-2 bg-white text-black py-3 rounded-md font-bold active:scale-[0.98] transition-all"
           >
-            <Play className="w-4 h-4 fill-black" />
-            <span className="text-[13px] tracking-tight font-black">PLAY</span>
+            <Play className="w-5 h-5 fill-black" />
+            <span className="text-[14px] uppercase tracking-tighter">Play</span>
           </button>
 
           <button
-            className="flex flex-col items-center gap-1 active:scale-95 transition-transform"
+            className="flex flex-col items-center gap-2 active:scale-95 transition-all text-white/30"
             onClick={onInfo}
           >
-            <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center border border-white/10 shadow-lg">
-              <Info className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-[9px] text-white/60 font-black tracking-widest uppercase">Info</span>
+            <Info className="w-6 h-6" />
+            <span className="text-[10px] font-medium uppercase tracking-tighter">Info</span>
           </button>
         </div>
       </div>

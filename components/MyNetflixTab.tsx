@@ -93,12 +93,12 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                 <h1 className="text-2xl font-black text-white">Profile</h1>
             </div>
 
-            <div className="flex flex-col items-center py-8">
-                <div className="w-24 h-24 rounded-2xl bg-blue-600 flex items-center justify-center text-3xl font-black text-white mb-3 shadow-2xl border-4 border-white/10 relative">
+            <div className="flex flex-col items-center py-10">
+                <div className="w-24 h-24 rounded-full bg-[#1a1a1a] flex items-center justify-center text-3xl font-bold text-gray-300 mb-4 border border-white/5 relative">
                     {userName.substring(0, 1).toUpperCase()}
-                    <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
+                    <button className="absolute bottom-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md active:scale-90 transition-all">
                         <Edit3 className="w-4 h-4 text-black" />
-                    </div>
+                    </button>
                 </div>
 
                 {isEditingName ? (
@@ -107,13 +107,13 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                             type="text"
                             value={tempName}
                             onChange={(e) => setTempName(e.target.value)}
-                            className="bg-[#1a1a1a] text-white px-3 py-2 rounded-lg text-sm outline-none border border-white/10 focus:border-red-600"
+                            className="bg-[#1a1a1a] text-white px-4 py-2 rounded-xl text-sm outline-none border border-white/10"
                             autoFocus
                         />
-                        <button onClick={saveName} className="bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-black uppercase tracking-tight">Save</button>
+                        <button onClick={saveName} className="bg-white text-black px-4 py-2 rounded-md text-xs font-bold uppercase transition-all">Save</button>
                     </div>
                 ) : (
-                    <h2 className="text-xl font-black text-white flex items-center gap-2 mt-1" onClick={() => setIsEditingName(true)}>
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2" onClick={() => setIsEditingName(true)}>
                         {userName}
                     </h2>
                 )}
@@ -121,39 +121,32 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
 
             {continueWatching.length > 0 && (
                 <div className="py-6">
-                    <h3 className="text-white font-black text-[13px] uppercase tracking-widest mb-4 px-6 opacity-60">
+                    <h3 className="text-white text-[15px] font-semibold mb-4 px-6 tracking-tight">
                         Continue Watching
                     </h3>
-                    <div className="flex overflow-x-auto gap-3 px-6 pb-4 scrollbar-hide snap-x snap-mandatory">
+                    <div className="flex overflow-x-auto gap-4 px-6 pb-4 scrollbar-hide snap-x snap-mandatory">
                         {continueWatching.map((item) => (
                             <div
                                 key={item.id}
                                 onClick={() => handleContinue(item)}
                                 className="flex-none w-[160px] snap-start cursor-pointer group relative"
                             >
-                                <div className="aspect-[16/9] bg-[#0a0a0a] rounded-xl overflow-hidden mb-2 relative border border-white/10">
+                                <div className="aspect-[16/9] bg-[#0a0a0a] rounded-xl overflow-hidden mb-2 relative">
                                     <img
                                         src={item.posterUrl || `https://via.placeholder.com/200x300`}
-                                        className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
+                                        className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700"
                                         alt={item.title}
                                     />
-                                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                                        <PlayCircle className="w-10 h-10 text-white/90 drop-shadow-lg" />
+                                    <div className="absolute inset-0 flex items-center justify-center bg-black/5 transition-colors group-active:bg-black/20">
+                                        <PlayCircle className="w-10 h-10 text-white/20" />
                                     </div>
-                                    <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-white/10">
-                                        <div className="h-full bg-red-600 w-1/2 rounded-r-full"></div>
+                                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/5">
+                                        <div className="h-full bg-white w-1/2 rounded-r-full opacity-60"></div>
                                     </div>
                                 </div>
 
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); onRemoveFromHistory(item.id); }}
-                                    className="absolute top-1 right-1 z-10 bg-black/80 text-white p-1.5 rounded-full border border-white/10 active:scale-90 transition-all"
-                                >
-                                    <X className="w-3.5 h-3.5" />
-                                </button>
-
-                                <h4 className="text-[12px] font-black text-white/90 line-clamp-1 px-1">{item.title}</h4>
-                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter px-1">
+                                <h4 className="text-[13px] font-semibold text-white/90 line-clamp-1 px-1">{item.title}</h4>
+                                <p className="text-[11px] text-gray-500 font-medium px-1">
                                     {item.type === 'MOVIE' ? 'Movie' : `S${item.lastSeason} • E${item.lastEpisode}`}
                                 </p>
                             </div>
@@ -163,38 +156,38 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
             )}
 
             <div className="px-6 py-6">
-                <h3 className="text-white font-black text-[13px] uppercase tracking-widest mb-4 opacity-60 flex items-center gap-2">
-                    <Key className="w-4 h-4 text-yellow-500" />
+                <h3 className="text-white text-[15px] font-semibold mb-4 flex items-center gap-2">
+                    <Key className="w-4 h-4 text-amber-500" />
                     TMDB Configuration
                 </h3>
                 <div className="space-y-3">
-                    <div className="bg-[#0a0a0a] p-4 rounded-xl border border-white/10">
-                        <label className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block mb-2">API Key (Private)</label>
+                    <div className="bg-[#0a0a0a] p-5 rounded-2xl border border-white/5">
+                        <label className="text-[11px] text-gray-500 font-medium uppercase tracking-wider block mb-3">API Key (Private)</label>
 
-                        <div className="flex gap-2">
+                        <div className="flex gap-3">
                             <input
                                 type="text"
                                 value={apiKey}
                                 onChange={(e) => setApiKey(e.target.value)}
                                 placeholder={isApiKeyLocked ? "••••••••••••••••" : "Paste your key here..."}
                                 disabled={isApiKeyLocked}
-                                className={`flex-1 text-[13px] px-4 py-3 rounded-lg border outline-none transition-all ${isApiKeyLocked
+                                className={`flex-1 text-[14px] px-4 py-3 rounded-xl border outline-none transition-all ${isApiKeyLocked
                                     ? 'bg-black text-gray-600 border-white/5'
-                                    : 'bg-[#1a1a1a] text-white border-white/10 focus:border-red-600'
+                                    : 'bg-[#1a1a1a] text-white border-white/10 focus:border-white/20'
                                     }`}
                             />
 
                             {showKeyConfirm ? (
-                                <div className="flex gap-2 animate-in fade-in slide-in-from-right-2">
+                                <div className="flex gap-2">
                                     <button
                                         onClick={confirmEdit}
-                                        className="bg-red-600 text-white px-4 py-3 rounded-lg text-xs font-black uppercase tracking-tight"
+                                        className="bg-white text-black px-5 py-3 rounded-xl text-xs font-bold transition-all"
                                     >
-                                        Edit?
+                                        Edit
                                     </button>
                                     <button
                                         onClick={cancelEdit}
-                                        className="bg-[#1a1a1a] text-white px-4 py-3 rounded-lg text-xs font-black uppercase tracking-tight border border-white/10"
+                                        className="bg-[#1a1a1a] text-white px-5 py-3 rounded-xl text-xs font-bold border border-white/5 transition-all"
                                     >
                                         No
                                     </button>
@@ -202,14 +195,14 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                             ) : isApiKeyLocked ? (
                                 <button
                                     onClick={handleEditKey}
-                                    className="bg-[#1a1a1a] hover:bg-[#222] text-white px-5 py-3 rounded-lg text-xs font-black uppercase tracking-tight border border-white/10 transition-colors"
+                                    className="bg-[#1a1a1a] text-white px-5 py-3 rounded-xl text-xs font-bold border border-white/5 transition-all"
                                 >
                                     Unlock
                                 </button>
                             ) : (
                                 <button
                                     onClick={saveKey}
-                                    className="bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-lg text-xs font-black uppercase tracking-tight transition-colors shadow-lg shadow-red-600/20"
+                                    className="bg-white text-black px-5 py-3 rounded-md text-xs font-bold transition-all shadow-lg"
                                 >
                                     Save
                                 </button>
@@ -220,26 +213,26 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
             </div>
 
             <div className="px-6 py-4">
-                <h3 className="text-white font-black text-[13px] uppercase tracking-widest mb-4 opacity-60 flex items-center gap-2">
+                <h3 className="text-white text-[15px] font-semibold mb-4 flex items-center gap-2">
                     <Wifi className="w-4 h-4 text-red-500" />
                     Playback Server
                 </h3>
-                <div className="bg-[#0a0a0a] rounded-xl p-2 border border-white/10">
-                    <div className="flex gap-2">
+                <div className="bg-white/5 rounded-md p-1 border border-white/5">
+                    <div className="flex gap-1">
                         <button
                             onClick={() => onServerChange('vidsrc')}
-                            className={`flex-1 py-3 text-xs font-black uppercase tracking-wider rounded-lg transition-all ${currentServer === 'vidsrc'
-                                ? 'bg-white text-black shadow-lg'
-                                : 'bg-[#1a1a1a] text-gray-500'
+                            className={`flex-1 py-3 text-[13px] font-semibold rounded-md transition-all ${currentServer === 'vidsrc'
+                                ? 'bg-white text-black'
+                                : 'bg-transparent text-white/30'
                                 }`}
                         >
                             Primary
                         </button>
                         <button
                             onClick={() => onServerChange('vidrock')}
-                            className={`flex-1 py-3 text-xs font-black uppercase tracking-wider rounded-lg transition-all ${currentServer === 'vidrock'
-                                ? 'bg-white text-black shadow-lg'
-                                : 'bg-[#1a1a1a] text-gray-500'
+                            className={`flex-1 py-3 text-[13px] font-semibold rounded-md transition-all ${currentServer === 'vidrock'
+                                ? 'bg-white text-black'
+                                : 'bg-transparent text-white/30'
                                 }`}
                         >
                             Mirror

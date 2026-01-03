@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MediaItem } from '../types';
 
 interface MediaCardProps {
@@ -8,7 +8,28 @@ interface MediaCardProps {
 }
 
 export const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
+  const [isInView, setIsInView] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' } // Load slightly before it enters the viewport
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const seed = item.imdbId || item.title;
   const imageUrl = (item.posterUrl && item.posterUrl !== 'N/A')
     ? item.posterUrl
@@ -16,7 +37,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
 
   return (
     <div
-      className="relative w-full aspect-[2/3] rounded-lg overflow-hidden cursor-pointer active:scale-95 transition-all duration-200 border border-white/10 bg-[#0a0a0a]"
+      ref={cardRef}
+      className="relative w-full aspect-[2/3] rounded-md overflow-hidden cursor-pointer active:scale-[0.97] transition-all duration-300 bg-black"
       onClick={() => onClick(item)}
     >
       {/* Skeleton Loading State */}
@@ -24,14 +46,16 @@ export const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
         <div className="absolute inset-0 skeleton z-0" />
       )}
 
-      <img
-        src={imageUrl}
-        alt={item.title}
-        loading="lazy"
-        decoding="async"
-        onLoad={() => setIsLoaded(true)}
-        className={`w-full h-full object-cover rounded-md ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
-      />
+      {isInView && (
+        <img
+          src={imageUrl}
+          alt={item.title}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setIsLoaded(true)}
+          className={`w-full h-full object-cover ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'} transition-all duration-700`}
+        />
+      )}
 
       {/* Tap Overlay */}
       <div className="absolute inset-0 bg-white/5 opacity-0 active:opacity-100 transition-opacity" />

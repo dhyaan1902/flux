@@ -60,7 +60,7 @@ const App: React.FC = () => {
             if (entries[0].isIntersecting && hasMore) {
                 loadMoreRows();
             }
-        });
+        }, { rootMargin: '1000px' });
 
         if (node) observer.current.observe(node);
     }, [loading, loadingMore, hasMore]);
@@ -211,11 +211,11 @@ const App: React.FC = () => {
             seenIds.current.clear();
 
             const genreName = selectedGenreId ? genres.find(g => g.id === selectedGenreId)?.name : undefined;
-            const { rows, hasMore: more } = await fetchHomeDataBatch(0, 5, selectedGenreId || undefined, genreName, seenIds.current, mediaTypeFilter);
+            const { rows, hasMore: more } = await fetchHomeDataBatch(0, 3, selectedGenreId || undefined, genreName, seenIds.current, mediaTypeFilter);
 
             if (isMounted) {
                 setHomeRows(rows);
-                setOffset(5);
+                setOffset(3);
                 setHasMore(more);
 
                 if (rows.length > 0) {
@@ -240,10 +240,10 @@ const App: React.FC = () => {
         setLoadingMore(true);
 
         const genreName = selectedGenreId ? genres.find(g => g.id === selectedGenreId)?.name : undefined;
-        const { rows, hasMore: more } = await fetchHomeDataBatch(offset, 5, selectedGenreId || undefined, genreName, seenIds.current, mediaTypeFilter);
+        const { rows, hasMore: more } = await fetchHomeDataBatch(offset, 3, selectedGenreId || undefined, genreName, seenIds.current, mediaTypeFilter);
 
         setHomeRows(prev => [...prev, ...rows]);
-        setOffset(prev => prev + 5);
+        setOffset(prev => prev + 3);
         setHasMore(more);
         setLoadingMore(false);
     };
@@ -360,7 +360,7 @@ const App: React.FC = () => {
                     <div className="pb-24">
                         {loading && homeRows.length === 0 ? (
                             <div className="flex items-center justify-center h-screen">
-                                <div className="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                                <div className="w-10 h-10 border-4 border-white/10 border-t-white rounded-full animate-spin"></div>
                             </div>
                         ) : (
                             <>
@@ -384,7 +384,7 @@ const App: React.FC = () => {
                                     ))}
 
                                     <div ref={bottomRef} className="h-24 w-full flex items-center justify-center">
-                                        {loadingMore && <div className="w-6 h-6 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />}
+                                        {loadingMore && <div className="w-6 h-6 border-2 border-white/10 border-t-white rounded-full animate-spin" />}
                                     </div>
 
                                     {homeRows.length === 0 && !loading && (

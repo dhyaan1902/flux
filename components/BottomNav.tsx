@@ -24,21 +24,23 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, us
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-white/10 z-50 pb-safe px-safe">
-      <div className="flex justify-around items-center px-4 h-14">
+    <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-white/5 z-50 pb-safe px-safe">
+      <div className="flex justify-around items-center px-2 h-20">
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
           return (
             <button
               key={item.id}
               onClick={() => onTabChange(item.id as NavTab)}
-              className="relative flex flex-col items-center justify-center w-full h-full transition-all active:scale-90"
+              className="relative flex flex-col items-center justify-center flex-1 h-full transition-all"
             >
-              <item.icon
-                className={`w-5 h-5 mb-1 transition-colors duration-200 ${isActive ? 'text-white' : 'text-gray-500'}`}
-                strokeWidth={isActive ? 2.5 : 2}
-              />
-              <span className={`text-[9px] tracking-tight transition-all duration-200 ${isActive ? 'text-white font-bold' : 'text-gray-600 font-medium'}`}>
+              <div className={`relative px-6 py-1.5 rounded-lg transition-all duration-300 ${isActive ? 'bg-white/10' : ''}`}>
+                <item.icon
+                  className={`w-6 h-6 transition-colors duration-300 ${isActive ? 'text-white' : 'text-white/30'}`}
+                  strokeWidth={isActive ? 2.5 : 2}
+                />
+              </div>
+              <span className={`text-[11px] mt-1 transition-all duration-300 ${isActive ? 'text-white font-medium' : 'text-white/20 font-medium'}`}>
                 {item.label}
               </span>
             </button>
@@ -48,15 +50,17 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, us
         {/* My Netflix Tab */}
         <button
           onClick={() => onTabChange('my-netflix')}
-          className="relative flex flex-col items-center justify-center w-full h-full transition-all active:scale-90"
+          className="relative flex flex-col items-center justify-center flex-1 h-full transition-all"
         >
-          <div className={`w-6 h-6 rounded-md flex items-center justify-center text-[9px] font-bold border transition-all duration-200 mb-1 ${activeTab === 'my-netflix'
-            ? 'bg-red-600 text-white border-red-500 scale-110 shadow-lg shadow-red-600/20'
-            : 'bg-[#1a1a1a] text-gray-500 border-white/5'
-            }`}>
-            {getInitials(userName)}
+          <div className={`relative px-6 py-1.5 rounded-lg transition-all duration-300 ${activeTab === 'my-netflix' ? 'bg-white/10' : ''}`}>
+            <div className={`w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold border transition-all duration-300 ${activeTab === 'my-netflix'
+              ? 'bg-white text-black border-white'
+              : 'bg-white/5 text-white/30 border-white/5'
+              }`}>
+              {getInitials(userName)}
+            </div>
           </div>
-          <span className={`text-[9px] tracking-tight transition-all duration-200 ${activeTab === 'my-netflix' ? 'text-white font-bold' : 'text-gray-600 font-medium'}`}>
+          <span className={`text-[11px] mt-1 transition-all duration-300 ${activeTab === 'my-netflix' ? 'text-white font-medium' : 'text-white/20 font-medium'}`}>
             Profile
           </span>
         </button>

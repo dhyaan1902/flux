@@ -52,18 +52,18 @@ export const SearchTab: React.FC<SearchTabProps> = ({ onItemClick }) => {
             {/* Sticky Header */}
             <div className="sticky top-0 z-30 bg-black pb-4 border-b border-white/10">
                 <div className="p-4">
-                    <div className="flex items-center bg-[#1a1a1a] rounded-xl h-12 px-5 transition-all focus-within:ring-1 focus-within:ring-red-600">
-                        <Search className="w-4 h-4 text-gray-400 mr-4" />
+                    <div className="flex items-center bg-[#1a1a1a] rounded-xl h-14 px-5 transition-all focus-within:bg-[#222]">
+                        <Search className="w-5 h-5 text-gray-500 mr-4" />
                         <input
                             autoFocus
                             type="text"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
-                            placeholder="Movies, shows, more..."
-                            className="flex-1 bg-transparent border-none focus:ring-0 text-white text-[14px] placeholder-gray-600 font-medium"
+                            placeholder="Search movies, shows..."
+                            className="flex-1 bg-transparent border-none focus:ring-0 text-white text-[15px] placeholder-gray-600 font-medium"
                         />
                         {query && (
-                            <button onClick={() => setQuery('')} className="p-1.5 rounded-full hover:bg-white/5 active:scale-90 transition-transform">
+                            <button onClick={() => setQuery('')} className="p-1.5 rounded-full active:scale-90 transition-transform">
                                 <X className="w-5 h-5 text-gray-500" />
                             </button>
                         )}
@@ -72,24 +72,24 @@ export const SearchTab: React.FC<SearchTabProps> = ({ onItemClick }) => {
 
                 {/* Filter Chips - MD3 Style */}
                 {query.length > 0 && (
-                    <div className="flex items-center gap-2.5 px-5 animate-in fade-in slide-in-from-top-1 duration-300">
+                    <div className="flex items-center gap-2 px-5 pb-2">
                         <button
                             onClick={() => setFilter('ALL')}
-                            className={`px-5 py-1.5 rounded-lg text-[11px] font-bold transition-all ${filter === 'ALL' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-gray-400 border border-white/5'}`}
+                            className={`px-5 py-2 rounded-md text-[13px] font-medium transition-all ${filter === 'ALL' ? 'bg-white text-black' : 'bg-white/5 text-white/40 border border-white/5'}`}
                         >
                             All
                         </button>
                         <button
                             onClick={() => setFilter('MOVIE')}
-                            className={`px-5 py-1.5 rounded-lg text-[11px] font-bold transition-all flex items-center gap-2 ${filter === 'MOVIE' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-gray-400 border border-white/5'}`}
+                            className={`px-5 py-2 rounded-md text-[13px] font-medium transition-all flex items-center gap-2 ${filter === 'MOVIE' ? 'bg-white text-black' : 'bg-white/5 text-white/40 border border-white/5'}`}
                         >
-                            <Film className="w-3 h-3" /> Movies
+                            <Film className="w-4 h-4" /> Movies
                         </button>
                         <button
                             onClick={() => setFilter('TV')}
-                            className={`px-5 py-1.5 rounded-lg text-[11px] font-bold transition-all flex items-center gap-2 ${filter === 'TV' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-gray-400 border border-white/5'}`}
+                            className={`px-5 py-2 rounded-md text-[13px] font-medium transition-all flex items-center gap-2 ${filter === 'TV' ? 'bg-white text-black' : 'bg-white/5 text-white/40 border border-white/5'}`}
                         >
-                            <Tv className="w-3 h-3" /> TV
+                            <Tv className="w-4 h-4" /> TV
                         </button>
                     </div>
                 )}
@@ -98,7 +98,7 @@ export const SearchTab: React.FC<SearchTabProps> = ({ onItemClick }) => {
             <div className="px-5 pt-6">
                 {loading ? (
                     <div className="flex flex-col items-center justify-center pt-32">
-                        <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin shadow-lg shadow-red-900/20" />
+                        <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin" />
                     </div>
                 ) : query.length > 0 ? (
                     <div className="space-y-6">
