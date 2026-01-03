@@ -23,7 +23,7 @@ export const getEmbedUrl = (
     default:
       // VidSrc logic
       return isMovie
-        ? `https://vidsrc.cc/v2/embed/movie/${id}?autoPlay=false`
-        : `https://vidsrc.cc/v2/embed/tv/${id}/${season}/${episode}?autoPlay=false`;
+        ? `https://vidking.net/embed/movie/${id}?color=4470ad&autoPlay=true`
+        : `https://vidking.net/embed/tv/${id}/${season}/${episode}?color=4470ad&autoPlay=true&episodeSelector=true`;
   }
 };
