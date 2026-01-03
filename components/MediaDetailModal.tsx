@@ -90,7 +90,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
     return (
         <div className="fixed inset-0 z-50 flex flex-col bg-black animate-in slide-in-from-bottom duration-300 ease-out">
             {/* Native Android AppBar Style */}
-            <div className="absolute top-0 left-0 right-0 z-40 p-4 pt-safe flex items-center justify-between text-white gradient-overlay-top">
+            <div className="absolute top-0 left-0 right-0 z-40 p-4 pt-[calc(env(safe-area-inset-top)+8px)] flex items-center justify-between text-white gradient-overlay-top">
                 <button
                     onClick={() => window.history.back()}
                     className="p-2 rounded-full bg-black/60 active:scale-90 transition-transform shadow-lg border border-white/10"
@@ -230,6 +230,16 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                                                         <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
                                                             <div className="flex items-start justify-between gap-2">
                                                                 <h4 className="text-white font-bold text-[13px] leading-tight line-clamp-2">{ep.episodeNumber}. {ep.title}</h4>
+                                                                <div className="flex-shrink-0">
+                                                                    <DownloadButton
+                                                                        tmdbId={details.tmdbId}
+                                                                        type={MediaType.TV_SHOW}
+                                                                        title={`${details.title} - S${currentSeason}E${ep.episodeNumber}`}
+                                                                        season={currentSeason}
+                                                                        episode={ep.episodeNumber}
+                                                                        variant="compact"
+                                                                    />
+                                                                </div>
                                                             </div>
                                                             <div className="flex items-center gap-2 text-gray-500 text-[10px] font-bold uppercase tracking-tighter">
                                                                 {ep.runtime ? <span>{ep.runtime}m</span> : null}

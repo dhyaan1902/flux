@@ -43,9 +43,9 @@ export const TopBar: React.FC<TopBarProps> = ({
     };
 
     return (
-        <div className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out pt-[env(safe-area-inset-top)] ${scrolled ? 'bg-black border-b border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.9)]' : 'bg-black/90 border-b border-white/5'
+        <div className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out pt-[calc(env(safe-area-inset-top)+10px)] ${scrolled ? 'bg-black border-b border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.9)]' : 'bg-black/90 border-b border-white/5'
             }`}>
-            <div className="flex items-center justify-between px-6 px-safe py-2.5">
+            <div className="flex items-center justify-between px-6 px-safe py-3">
                 {/* Logo or Brand */}
                 <div className="flex items-center gap-4">
                     <h1 className="text-red-600 font-extrabold text-2xl tracking-tighter">FLUX</h1>
@@ -60,9 +60,9 @@ export const TopBar: React.FC<TopBarProps> = ({
             </div>
 
             {/* Category Pills - Scrollable Row */}
-            <div className={`w-full overflow-x-auto scrollbar-hide px-6 px-safe transition-all duration-300 ease-in-out ${scrolled ? 'h-0 opacity-0 pointer-events-none' : 'h-11 opacity-100'
+            <div className={`w-full overflow-x-auto overflow-y-hidden scrollbar-hide px-6 px-safe transition-all duration-300 ease-in-out ${scrolled ? 'h-0 opacity-0 pointer-events-none' : 'h-12 opacity-100'
                 }`}>
-                <div className="flex items-center gap-2 pr-6 min-w-max pb-3">
+                <div className="flex items-center gap-2 pr-6 min-w-max h-full">
                     {[
                         { id: null, label: 'All', type: null },
                         { id: 'tv', label: 'TV Shows', type: MediaType.TV_SHOW },
@@ -71,7 +71,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                         <button
                             key={cat.id || 'all'}
                             onClick={() => handleCategoryClick(cat.type)}
-                            className={`px-5 py-2 rounded-full text-[12px] font-bold transition-all ${mediaType === cat.type && selectedGenreId === null
+                            className={`px-5 py-2 rounded-full text-[12px] font-bold transition-all ${mediaType === cat.type
                                 ? 'bg-white text-black'
                                 : 'bg-[#1a1a1a] text-gray-400 border border-white/5'
                                 }`}

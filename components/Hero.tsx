@@ -46,33 +46,33 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
           ))}
         </div>
 
-        <div className="flex items-center gap-6 w-full max-w-sm justify-center animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500">
+        <div className="flex items-center gap-8 w-full max-w-sm justify-center animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500">
           <button
-            className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
+            className="flex flex-col items-center gap-1 active:scale-95 transition-transform"
             onClick={onToggleMyList}
           >
-            <div className="w-12 h-12 rounded-full bg-[#1a1a1a] flex items-center justify-center border border-white/10 shadow-lg">
-              {isInMyList ? <Check className="w-6 h-6 text-white" /> : <Plus className="w-6 h-6 text-white" />}
+            <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center border border-white/10 shadow-lg">
+              {isInMyList ? <Check className="w-5 h-5 text-white" /> : <Plus className="w-5 h-5 text-white" />}
             </div>
-            <span className="text-[10px] text-white/60 font-bold tracking-tight uppercase">My List</span>
+            <span className="text-[9px] text-white/60 font-black tracking-widest uppercase">My List</span>
           </button>
 
           <button
             onClick={onPlay}
-            className="flex-1 flex items-center justify-center gap-3 bg-white text-black py-4 rounded-xl font-bold active:scale-[0.97] transition-all shadow-xl shadow-white/5"
+            className="px-8 flex items-center justify-center gap-2 bg-white text-black py-2.5 rounded-full font-bold active:scale-[0.97] transition-all shadow-xl shadow-white/5"
           >
-            <Play className="w-5 h-5 fill-black" />
-            <span className="text-base tracking-tight font-black">PLAY</span>
+            <Play className="w-4 h-4 fill-black" />
+            <span className="text-[13px] tracking-tight font-black">PLAY</span>
           </button>
 
           <button
-            className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
+            className="flex flex-col items-center gap-1 active:scale-95 transition-transform"
             onClick={onInfo}
           >
-            <div className="w-12 h-12 rounded-full bg-[#1a1a1a] flex items-center justify-center border border-white/10 shadow-lg">
-              <Info className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center border border-white/10 shadow-lg">
+              <Info className="w-5 h-5 text-white" />
             </div>
-            <span className="text-[10px] text-white/60 font-bold tracking-tight uppercase">Info</span>
+            <span className="text-[9px] text-white/60 font-black tracking-widest uppercase">Info</span>
           </button>
         </div>
       </div>
