@@ -13,9 +13,9 @@ export const setTmdbApiKey = (key: string) => {
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 // Optimized Image Sizes to reduce memory/bandwidth
 // Posters: w342 (approx 50KB) vs w500 (approx 150KB) - Cards are max 160px wide
-const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w185';
-// Backdrops: w780 (approx 150KB) - Sufficient for high-quality hero backgrounds on mobile
-const TMDB_BACKDROP_BASE = 'https://image.tmdb.org/t/p/w780';
+const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w342';
+// Backdrops: w1280 (approx 300KB) - High quality for Hero section on all mobile screens
+const TMDB_BACKDROP_BASE = 'https://image.tmdb.org/t/p/w1280';
 const CINEMETA_BASE = 'https://v3-cinemeta.strem.io';
 
 const GENRE_MAP: Record<number, string> = {
@@ -82,7 +82,7 @@ const fetchCinemeta = async (endpoint: string) => {
 const getImageUrl = (path?: string, type: 'poster' | 'backdrop' | 'still' = 'poster') => {
     if (!path) return undefined;
     if (type === 'backdrop') return `${TMDB_BACKDROP_BASE}${path}`;
-    if (type === 'still') return `https://image.tmdb.org/t/p/w185${path}`;
+    if (type === 'still') return `https://image.tmdb.org/t/p/w300${path}`;
     return `${TMDB_IMAGE_BASE}${path}`;
 };
 
