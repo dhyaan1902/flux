@@ -429,6 +429,7 @@ const App: React.FC = () => {
                 <LibraryTab
                     items={myList}
                     onItemClick={setSelectedItem}
+                    onRemoveFromLibrary={removeFromMyList}
                 />
             )}
 

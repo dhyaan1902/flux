@@ -1,15 +1,17 @@
 import React from 'react';
 import { MediaItem } from '../types';
-import { PlayCircle } from 'lucide-react';
+import { PlayCircle, X } from 'lucide-react';
 
 interface LibraryTabProps {
     items: MediaItem[];
     onItemClick: (item: MediaItem) => void;
+    onRemoveFromLibrary: (item: MediaItem) => void;
 }
 
 export const LibraryTab: React.FC<LibraryTabProps> = ({
     items,
-    onItemClick
+    onItemClick,
+    onRemoveFromLibrary
 }) => {
     return (
         <div className="min-h-screen pb-24 pt-24 px-4 bg-black">
@@ -47,7 +49,18 @@ export const LibraryTab: React.FC<LibraryTabProps> = ({
                                 <PlayCircle className="w-12 h-12 text-white opacity-80" />
                             </div>
 
-                            <div className="absolute top-1 left-1 bg-red-600 text-[8px] font-bold px-1 rounded-sm text-white">N</div>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onRemoveFromLibrary(item);
+                                }}
+                                className="absolute top-1 right-1 w-6 h-6 bg-black/60 backdrop-blur-sm rounded-full flex items-center justify-center text-white/70 active:bg-red-500 active:text-white transition-all"
+                                title="Remove from Library"
+                            >
+                                <X className="w-3 h-3" />
+                            </button>
+
+                            <div className="absolute top-1 left-1 bg-red-600 text-[8px] font-bold px-1 rounded-sm text-white pointer-events-none">N</div>
                         </div>
                     ))}
                 </div>

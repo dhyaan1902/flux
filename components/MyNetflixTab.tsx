@@ -143,6 +143,17 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/5">
                                         <div className="h-full bg-white w-1/2 rounded-r-full opacity-60"></div>
                                     </div>
+
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onRemoveFromHistory(item.id);
+                                        }}
+                                        className="absolute top-2 right-2 w-7 h-7 bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center text-white/80 active:bg-red-500/80 active:text-white transition-all"
+                                        title="Remove from history"
+                                    >
+                                        <X className="w-3.5 h-3.5" />
+                                    </button>
                                 </div>
 
                                 <h4 className="text-[13px] font-semibold text-white/90 line-clamp-1 px-1">{item.title}</h4>
