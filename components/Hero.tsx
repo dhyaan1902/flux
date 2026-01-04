@@ -15,8 +15,7 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
   const [isLoaded, setIsLoaded] = useState(false);
   const seed = item.imdbId || 'hero';
 
-  const rawUrl = item.backdropUrl || item.posterUrl || `https://picsum.photos/seed/${seed}/800/1200`;
-  const backgroundUrl = rawUrl.replace('w342', 'original').replace('w1280', 'original');
+  const backgroundUrl = item.backdropUrl || item.posterUrl || `https://picsum.photos/seed/${seed}/800/1200`;
 
   return (
     <div className="relative w-full md:aspect-video aspect-[2/3] max-h-[85vh] overflow-hidden bg-black">

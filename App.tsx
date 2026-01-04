@@ -60,7 +60,7 @@ const App: React.FC = () => {
             if (entries[0].isIntersecting && hasMore) {
                 loadMoreRows();
             }
-        }, { rootMargin: '1000px' });
+        }, { rootMargin: '400px' });
 
         if (node) observer.current.observe(node);
     }, [loading, loadingMore, hasMore]);
