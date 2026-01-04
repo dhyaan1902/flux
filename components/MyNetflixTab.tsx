@@ -110,7 +110,7 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                             className="bg-[#1a1a1a] text-white px-4 py-2 rounded-xl text-sm outline-none border border-white/10"
                             autoFocus
                         />
-                        <button onClick={saveName} className="bg-white text-black px-4 py-2 rounded-md text-xs font-bold uppercase transition-all">Save</button>
+                        <button onClick={saveName} className="bg-white text-black px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all">Save</button>
                     </div>
                 ) : (
                     <h2 className="text-xl font-bold text-white flex items-center gap-2" onClick={() => setIsEditingName(true)}>
@@ -173,51 +173,53 @@ export const MyNetflixTab: React.FC<MyNetflixTabProps> = ({
                 </h3>
                 <div className="space-y-3">
                     <div className="bg-[#0a0a0a] p-5 rounded-2xl border border-white/5">
-                        <label className="text-[11px] text-gray-500 font-medium uppercase tracking-wider block mb-3">API Key (Private)</label>
+                        <label className="text-[11px] text-gray-500 font-medium uppercase tracking-wider block mb-3 text-center sm:text-left opacity-60">API Key (Private)</label>
 
-                        <div className="flex gap-3">
+                        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
                             <input
                                 type="text"
                                 value={apiKey}
                                 onChange={(e) => setApiKey(e.target.value)}
                                 placeholder={isApiKeyLocked ? "••••••••••••••••" : "Paste your key here..."}
                                 disabled={isApiKeyLocked}
-                                className={`flex-1 text-[14px] px-4 py-3 rounded-xl border outline-none transition-all ${isApiKeyLocked
+                                className={`flex-1 text-[14px] px-4 py-3 rounded-xl border outline-none transition-all min-w-0 ${isApiKeyLocked
                                     ? 'bg-black text-gray-600 border-white/5'
                                     : 'bg-[#1a1a1a] text-white border-white/10 focus:border-white/20'
                                     }`}
                             />
 
-                            {showKeyConfirm ? (
-                                <div className="flex gap-2">
+                            <div className="flex gap-2 shrink-0">
+                                {showKeyConfirm ? (
+                                    <>
+                                        <button
+                                            onClick={confirmEdit}
+                                            className="flex-1 sm:flex-none bg-white text-black px-5 py-3 rounded-xl text-[11px] font-bold transition-all"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={cancelEdit}
+                                            className="flex-1 sm:flex-none bg-[#1a1a1a] text-white px-5 py-3 rounded-xl text-[11px] font-bold border border-white/5 transition-all"
+                                        >
+                                            No
+                                        </button>
+                                    </>
+                                ) : isApiKeyLocked ? (
                                     <button
-                                        onClick={confirmEdit}
-                                        className="bg-white text-black px-5 py-3 rounded-xl text-xs font-bold transition-all"
+                                        onClick={handleEditKey}
+                                        className="flex-1 sm:flex-none bg-[#1a1a1a] text-white px-5 py-3 rounded-xl text-[11px] font-bold border border-white/5 transition-all"
                                     >
-                                        Edit
+                                        Unlock
                                     </button>
+                                ) : (
                                     <button
-                                        onClick={cancelEdit}
-                                        className="bg-[#1a1a1a] text-white px-5 py-3 rounded-xl text-xs font-bold border border-white/5 transition-all"
+                                        onClick={saveKey}
+                                        className="flex-1 sm:flex-none bg-white text-black px-6 py-3 rounded-xl text-[11px] font-bold transition-all shadow-lg"
                                     >
-                                        No
+                                        Save
                                     </button>
-                                </div>
-                            ) : isApiKeyLocked ? (
-                                <button
-                                    onClick={handleEditKey}
-                                    className="bg-[#1a1a1a] text-white px-5 py-3 rounded-xl text-xs font-bold border border-white/5 transition-all"
-                                >
-                                    Unlock
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={saveKey}
-                                    className="bg-white text-black px-5 py-3 rounded-md text-xs font-bold transition-all shadow-lg"
-                                >
-                                    Save
-                                </button>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
