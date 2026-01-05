@@ -32,15 +32,15 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, us
             <button
               key={item.id}
               onClick={() => onTabChange(item.id as NavTab)}
-              className="relative flex flex-col items-center justify-center flex-1 h-full transition-all"
+              className="relative flex flex-col items-center justify-center flex-1 h-full transition-all duration-200"
             >
-              <div className={`relative px-6 py-1.5 rounded-lg transition-all duration-300 ${isActive ? 'bg-white/10' : ''}`}>
+              <div className={`relative px-6 py-1.5 rounded-xl transition-all duration-200 ${isActive ? 'bg-white/[0.12]' : ''}`}>
                 <item.icon
-                  className={`w-6 h-6 transition-colors duration-300 ${isActive ? 'text-white' : 'text-white/30'}`}
+                  className={`w-6 h-6 transition-all duration-200 ${isActive ? 'text-white' : 'text-white/25'}`}
                   strokeWidth={isActive ? 2.5 : 2}
                 />
               </div>
-              <span className={`text-[11px] mt-1 transition-all duration-300 ${isActive ? 'text-white font-medium' : 'text-white/20 font-medium'}`}>
+              <span className={`text-[11px] mt-1.5 transition-all duration-200 ${isActive ? 'text-white font-semibold' : 'text-white/20 font-medium'}`}>
                 {item.label}
               </span>
             </button>
@@ -50,17 +50,17 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, us
         {/* My Netflix Tab */}
         <button
           onClick={() => onTabChange('my-netflix')}
-          className="relative flex flex-col items-center justify-center flex-1 h-full transition-all"
+          className="relative flex flex-col items-center justify-center flex-1 h-full transition-all duration-200"
         >
-          <div className={`relative px-6 py-1.5 rounded-lg transition-all duration-300 ${activeTab === 'my-netflix' ? 'bg-white/10' : ''}`}>
-            <div className={`w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold border transition-all duration-300 ${activeTab === 'my-netflix'
+          <div className={`relative px-6 py-1.5 rounded-xl transition-all duration-200 ${activeTab === 'my-netflix' ? 'bg-white/[0.12]' : ''}`}>
+            <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-bold border transition-all duration-200 ${activeTab === 'my-netflix'
               ? 'bg-white text-black border-white'
-              : 'bg-white/5 text-white/30 border-white/5'
+              : 'bg-white/[0.06] text-white/25 border-white/[0.06]'
               }`}>
               {getInitials(userName)}
             </div>
           </div>
-          <span className={`text-[11px] mt-1 transition-all duration-300 ${activeTab === 'my-netflix' ? 'text-white font-medium' : 'text-white/20 font-medium'}`}>
+          <span className={`text-[11px] mt-1.5 transition-all duration-200 ${activeTab === 'my-netflix' ? 'text-white font-semibold' : 'text-white/20 font-medium'}`}>
             Profile
           </span>
         </button>

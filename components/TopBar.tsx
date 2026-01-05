@@ -23,9 +23,9 @@ const CategoryPill: React.FC<{
 }) => (
         <button
             onClick={onClick}
-            className={`px-4 h-full rounded-full text-[13px] font-medium transition-all whitespace-nowrap border ${active
-                ? 'bg-white text-black border-white'
-                : 'bg-white/5 text-white/60 border-white/10 hover:bg-white/10'
+            className={`px-4 h-full rounded-full text-[13px] font-medium transition-all duration-300 whitespace-nowrap border shadow-sm ${active
+                ? 'bg-white text-black border-white shadow-white/10'
+                : 'bg-white/[0.06] text-white/50 border-white/[0.08] hover:bg-white/[0.12] hover:text-white/70 hover:border-white/[0.15]'
                 }`}
         >
             {label}

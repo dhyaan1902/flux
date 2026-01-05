@@ -12,7 +12,7 @@ interface RowProps {
 export const Row: React.FC<RowProps> = ({ title, items, onItemClick }) => {
   return (
     <div className="mb-8">
-      <h2 className="text-white text-[15px] font-semibold mb-4 px-5 tracking-tight">{title}</h2>
+      <h2 className="text-white text-[16px] font-semibold mb-4 px-5 tracking-tight">{title}</h2>
       <div className="flex overflow-x-auto gap-4 px-5 pb-2 scrollbar-hide snap-x snap-mandatory">
         {items.map((item) => (
           <div key={item.id} className="flex-none w-[115px] md:w-[170px] snap-start">

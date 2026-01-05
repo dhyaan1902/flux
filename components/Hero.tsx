@@ -27,8 +27,8 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
           onLoad={() => setIsLoaded(true)}
           className={`w-full h-full object-cover transition-all duration-1000 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
         />
-        <div className="absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-t from-black via-black/80 to-transparent z-10" />
-        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/90 via-black/40 to-transparent z-10" />
+        <div className="absolute inset-x-0 bottom-0 h-[75%] bg-gradient-to-t from-black via-black/85 to-transparent z-10" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black via-black/30 to-transparent z-10" />
       </div>
 
       {/* Content */}
@@ -37,14 +37,14 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
           {item.title}
         </h1>
 
-        <div className="flex flex-wrap justify-center gap-2 mb-8 items-center">
+        <div className="flex flex-wrap justify-center gap-2.5 mb-8 items-center">
           {item.genres.slice(0, 3).map((g, i) => (
             <React.Fragment key={i}>
-              <span className="text-[12px] text-gray-300 font-medium">
+              <span className="text-[13px] text-gray-200 font-medium">
                 {g}
               </span>
               {i < Math.min(2, item.genres.length - 1) && (
-                <div className="w-1 h-1 rounded-full bg-gray-600" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gray-500" />
               )}
             </React.Fragment>
           ))}
@@ -52,27 +52,27 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
 
         <div className="flex items-center gap-10 w-full max-w-sm justify-center group">
           <button
-            className="flex flex-col items-center gap-2 active:scale-95 transition-all text-white/30"
+            className="flex flex-col items-center gap-2 active:scale-95 transition-all duration-200 text-white/30 hover:text-white/50"
             onClick={onToggleMyList}
           >
             {isInMyList ? <Check className="w-6 h-6 text-white" /> : <Plus className="w-6 h-6" />}
-            <span className="text-[10px] font-medium uppercase tracking-tighter">My List</span>
+            <span className="text-[10px] font-semibold uppercase tracking-tight">My List</span>
           </button>
 
           <button
             onClick={onPlay}
-            className="px-12 flex items-center justify-center gap-2 bg-white text-black py-3 rounded-md font-bold active:scale-[0.98] transition-all"
+            className="px-12 flex items-center justify-center gap-2.5 bg-white text-black py-3.5 rounded-lg font-bold active:scale-[0.98] transition-all duration-200 shadow-lg shadow-white/20"
           >
             <Play className="w-5 h-5 fill-black" />
-            <span className="text-[14px] uppercase tracking-tighter">Play</span>
+            <span className="text-[15px] uppercase tracking-tight">Play</span>
           </button>
 
           <button
-            className="flex flex-col items-center gap-2 active:scale-95 transition-all text-white/30"
+            className="flex flex-col items-center gap-2 active:scale-95 transition-all duration-200 text-white/30 hover:text-white/50"
             onClick={onInfo}
           >
             <Info className="w-6 h-6" />
-            <span className="text-[10px] font-medium uppercase tracking-tighter">Info</span>
+            <span className="text-[10px] font-semibold uppercase tracking-tight">Info</span>
           </button>
         </div>
       </div>
