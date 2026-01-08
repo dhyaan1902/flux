@@ -120,22 +120,23 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                 <div className="px-6 -mt-8 relative z-10 pb-20">
                     <h2 className="text-3xl font-black text-white mb-2 leading-tight drop-shadow-2xl">{details.title}</h2>
 
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-gray-500 text-[11px] mb-6 font-bold uppercase tracking-wider">
-                        <span className="text-green-500">98% Match</span>
-                        <span className="border border-white/20 px-1.5 py-0.5 rounded-sm text-white">HDR</span>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-gray-500 text-xs mb-6 font-medium">
                         <span>{details.year}</span>
                         {details.type === MediaType.TV_SHOW && (
-                            <span>{seasonCount} Season{seasonCount > 1 ? 's' : ''}</span>
+                            <>
+                                <span>•</span>
+                                <span>{seasonCount} Season{seasonCount > 1 ? 's' : ''}</span>
+                            </>
                         )}
                     </div>
 
                     <div className="flex gap-3 mb-8">
                         <button
                             onClick={handlePlayMain}
-                            className="flex-1 flex items-center justify-center gap-2 bg-white text-black font-black py-4 rounded-xl active:scale-95 transition-transform"
+                            className="flex-1 flex items-center justify-center gap-2 bg-white text-black font-bold py-4 rounded-xl active:scale-[0.98] transition-all duration-150"
                         >
                             <PlayIcon className={`w-5 h-5 ${PlayIcon === Play ? 'fill-black' : ''}`} />
-                            <span className="text-[15px] uppercase tracking-tight">{playButtonText}</span>
+                            <span className="text-sm">{playButtonText}</span>
                         </button>
                     </div>
 
@@ -151,7 +152,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                             <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/5 active:bg-white/10 transition-colors">
                                 {isInMyList ? <Check className="w-6 h-6 text-white" /> : <Plus className="w-6 h-6 text-white" />}
                             </div>
-                            <span className="text-[10px] text-gray-500 font-medium tracking-tight">My List</span>
+                            <span className="text-xs text-gray-500 font-medium">My List</span>
                         </button>
 
                         <DownloadButton
@@ -169,16 +170,16 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                             {details.type === MediaType.TV_SHOW && (
                                 <button
                                     onClick={() => setActiveTab('EPISODES')}
-                                    className={`py-4 text-[11px] font-black tracking-widest transition-all ${activeTab === 'EPISODES' ? 'text-white border-t-2 border-red-600' : 'text-gray-600'}`}
+                                    className={`py-4 text-xs font-bold transition-all ${activeTab === 'EPISODES' ? 'text-white border-t-2 border-white' : 'text-gray-600'}`}
                                 >
-                                    EPISODES
+                                    Episodes
                                 </button>
                             )}
                             <button
                                 onClick={() => setActiveTab('MORE')}
-                                className={`py-4 text-[11px] font-black tracking-widest transition-all ${activeTab === 'MORE' ? 'text-white border-t-2 border-red-600' : 'text-gray-600'}`}
+                                className={`py-4 text-xs font-bold transition-all ${activeTab === 'MORE' ? 'text-white border-t-2 border-white' : 'text-gray-600'}`}
                             >
-                                MORE LIKE THIS
+                                More Like This
                             </button>
                         </div>
 

@@ -38,7 +38,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
   return (
     <div
       ref={cardRef}
-      className="relative w-full aspect-[2/3] rounded-lg overflow-hidden cursor-pointer active:scale-[0.96] transition-all duration-200 bg-black shadow-lg shadow-black/40"
+      className="relative w-full aspect-[2/3] rounded-lg overflow-hidden cursor-pointer active:scale-[0.98] transition-all duration-150 bg-black shadow-md shadow-black/30"
       onClick={() => onClick(item)}
     >
       {/* Skeleton Loading State */}
@@ -58,7 +58,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
       )}
 
       {/* Tap Overlay */}
-      <div className="absolute inset-0 bg-white/[0.08] opacity-0 active:opacity-100 transition-opacity duration-100" />
+      <div className="absolute inset-0 bg-white/5 opacity-0 active:opacity-100 transition-opacity duration-100" />
     </div>
   );
 };

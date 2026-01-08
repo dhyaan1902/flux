@@ -47,3 +47,4 @@ capacitor.config.json
 # Temporary
 aligned.apk
 temp/
+cloudstream*

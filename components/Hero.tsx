@@ -52,27 +52,27 @@ export const Hero: React.FC<HeroProps> = ({ item, onPlay, onInfo, isInMyList, on
 
         <div className="flex items-center gap-10 w-full max-w-sm justify-center group">
           <button
-            className="flex flex-col items-center gap-2 active:scale-95 transition-all duration-200 text-white/30 hover:text-white/50"
+            className="flex flex-col items-center gap-2 active:scale-95 transition-all duration-200 text-white/40 hover:text-white/60"
             onClick={onToggleMyList}
           >
             {isInMyList ? <Check className="w-6 h-6 text-white" /> : <Plus className="w-6 h-6" />}
-            <span className="text-[10px] font-semibold uppercase tracking-tight">My List</span>
+            <span className="text-xs font-medium">My List</span>
           </button>
 
           <button
             onClick={onPlay}
-            className="px-12 flex items-center justify-center gap-2.5 bg-white text-black py-3.5 rounded-lg font-bold active:scale-[0.98] transition-all duration-200 shadow-lg shadow-white/20"
+            className="px-12 flex items-center justify-center gap-2.5 bg-white text-black py-3.5 rounded-lg font-bold active:scale-[0.98] transition-all duration-150 shadow-lg shadow-white/20"
           >
             <Play className="w-5 h-5 fill-black" />
-            <span className="text-[15px] uppercase tracking-tight">Play</span>
+            <span className="text-sm">Play</span>
           </button>
 
           <button
-            className="flex flex-col items-center gap-2 active:scale-95 transition-all duration-200 text-white/30 hover:text-white/50"
+            className="flex flex-col items-center gap-2 active:scale-95 transition-all duration-200 text-white/40 hover:text-white/60"
             onClick={onInfo}
           >
             <Info className="w-6 h-6" />
-            <span className="text-[10px] font-semibold uppercase tracking-tight">Info</span>
+            <span className="text-xs font-medium">Info</span>
           </button>
         </div>
       </div>
